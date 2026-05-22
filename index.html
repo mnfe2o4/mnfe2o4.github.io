@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>MNFE2O4个人主页</title>
+
+  <!-- TODO 1：这里的 CSS 文件名写错了，请你修复 -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="top-bar">
+      <div class="site-name">我的作品集</div>
+
+      <!-- TODO 2：在这里添加导航链接 -->
+      <!-- 需要有：关于我、文章列表、当前进度、联系方式 -->
+      <nav class="nav-links">
+        <a href="#about">关于我</a>
+        <a href="#works">文章列表</a>
+        <a href="#current">当前进度</a>
+        <a href="#contact">联系方式</a>
+      </nav>
+    </div>
+
+    <div class="hero">
+      <h1>MNFE2O4的秘密空间</h1>
+      <p>学习笔记和兴之所至</p>
+    </div>
+  </header>
+
+  <main>
+    <section id="about">
+      <h2>关于我</h2>
+      <p>
+        数学系大学生，学习HTML和游戏数值拆解中。
+        这个网站会展示我平时学校的笔记和学习笔记。
+      </p>
+    </section>
+
+    <section id="works">
+      <h2>文章列表</h2>
+
+      <!-- TODO 3：把下面的普通列表改成三个 article 卡片 -->
+      <article class="work-card">
+        <h3>
+          <a href="articles/first_note.html">数学学习笔记</a>
+        </h3>
+        <p>收录了个人的专业课学习笔记</p>
+        <span class="tag">学习笔记</span>
+      </article>
+
+      <article class="work-card">
+        <h3>
+          <a href="articles/second_note.html">HTML与网页搭建学习</a>
+        </h3>
+        <p>记录了搭建个人主页的全流程以及HTML学习笔记</p>
+        <span class="tag">学习笔记</span>
+      </article>
+
+      <article class="work-card">
+        <h3>游戏数值设计笔记</h3>
+        <p>记录了学习游戏数值设计时的感想和笔记</p>
+      </article>
+
+      <article class="work-card">
+        <h3>游戏数值拆解案例</h3>
+        <p>记录了各大游戏的数值拆解</p>
+      </article>
+    </section>
+
+    <!-- TODO 4：在这里新增一个 section，id 叫 current，标题叫 当前学习进度 -->
+    <section id="current">
+      <h2>学习进度</h2>
+    </section>
+
+    <section id="contact">
+      <h2>联系方式</h2>
+      <p>邮箱：your-email@example.com</p>
+      <p>GitHub：你的 GitHub 用户名</p>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2026 我的作品集</p>
+  </footer>
+
+</body>
+</html>

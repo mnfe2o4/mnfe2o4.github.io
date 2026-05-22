@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <title>HTML学习笔记</title>
+
+    <link rel="stylesheet" href="../style.css">
+
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']],
+                displayMath: [['\\[', '\\]']]
+            }
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+
+<body>
+    <header>
+        <h1>HTML学习笔记</h1>
+    </header>
+
+    <main>
+        <section class="card">
+            <h2>文章简介</h2>
+            <p>
+                这篇文章整理了HTML的基础语法和学习心得。
+            </p>
+        </section>
+
+        <section class="card">
+            <h2>HTML基础语法</h2>
+            <p>
+                梳理了HTML的基础语法和常用标签。
+            </p>
+
+            <h3>常用标签</h3>
+            <p>
+                HTML中有很多常用的标签，它们用于构建网页的结构和内容。以下是一些常见的标签：
+                <ul>
+                    <li><code>&lt;html&gt;</code>：定义HTML文档的根元素</li>
+                    <li><code>&lt;head&gt;</code>：包含文档的元数据</li>
+                    <li><code>&lt;title&gt;</code>：定义文档的标题</li>
+                    <li><code>&lt;body&gt;</code>：包含文档的主体内容</li>
+                    <li><code>&lt;h1&gt;</code>到<code>&lt;h6&gt;</code>：定义标题</li>
+                    <li><code>&lt;p&gt;</code>：定义段落</li>
+                    <li><code>&lt;a&gt;</code>：定义超链接</li>
+                    <li><code>&lt;img&gt;</code>：插入图像</li>
+                    <li><code>&lt;ul&gt;</code>、<code>&lt;ol&gt;</code>和<code>&lt;li&gt;</code>：定义列表</li>
+                </ul>
+            </p>
+        </section>
+
+        <section class="card">
+            <h2>LaTeX 公式示例</h2>
+
+            <p>
+                在游戏数值分析中，我们经常会计算某个随机奖励的期望。
+                如果一个随机变量 \(X\) 有多个可能结果，那么它的期望可以写成：
+            </p>
+
+            <p>
+                \[
+                E(X)=\sum_i x_i p_i
+                \]
+            </p>
+
+            <p>
+                其中，\(x_i\) 表示第 \(i\) 种可能结果，\(p_i\) 表示这个结果出现的概率。
+            </p>
+        </section>
+
+        <section class="card">
+            <h2>基础数值表格示例</h2>
+
+            <p>
+                下面用一个简单表格记录不同等级的经验值需求。以后可以把它替换成
+                游戏系统拆解、概率分析或课程笔记中的数据。
+            </p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>等级</th>
+                        <th>所需经验</th>
+                        <th>说明</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>0</td>
+                        <td>初始等级</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>100</td>
+                        <td>完成新手阶段</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>250</td>
+                        <td>开始进入成长阶段</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="card">
+            <h2>返回首页</h2>
+            <p>
+                <a href="../index.html">返回首页</a>
+            </p>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2026 我的作品集网站</p>
+    </footer>
+</body>
+
+</html>
