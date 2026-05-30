@@ -1,26 +1,24 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
   <meta charset="UTF-8">
   <title>MNFE2O4个人主页</title>
-
-  <!-- TODO 1：这里的 CSS 文件名写错了，请你修复 -->
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
   <header class="site-header">
     <div class="top-bar">
-      <div class="site-name">我的作品集</div>
-
-      <!-- TODO 2：在这里添加导航链接 -->
-      <!-- 需要有：关于我、文章列表、当前进度、联系方式 -->
       <nav class="nav-links">
-        <a href="#about">关于我</a>
+        <a href="about.html">关于我</a>
         <a href="#works">文章列表</a>
         <a href="#current">当前进度</a>
         <a href="#contact">联系方式</a>
       </nav>
+
+      <div class="site-name">MNFE2O4</div>
     </div>
 
     <div class="hero">
@@ -30,23 +28,25 @@
   </header>
 
   <main>
-    <section id="about">
-      <h2>关于我</h2>
+    <section id="introduction" class="card">
+      <h2>网站简介</h2>
       <p>
-        数学系大学生，学习HTML和游戏数值拆解中。
-        这个网站会展示我平时学校的笔记和学习笔记。
+        这是我的个人作品集网站，用来整理课程学习笔记、网页搭建过程、数学公式记录，
+        以及未来的游戏数值拆解案例。
+      </p>
+      <p>
+        当前网站仍在持续完善中，重点是先建立清晰的文章结构和可长期维护的发布流程。
       </p>
     </section>
 
-    <section id="works">
+    <section id="works" class="work-list">
       <h2>文章列表</h2>
-
-      <!-- TODO 3：把下面的普通列表改成三个 article 卡片 -->
       <article class="work-card">
         <h3>
-          <a href="articles/first_note.html">数学学习笔记</a>
+          <a href="articles/statistics.html">数学学习笔记</a>
         </h3>
         <p>收录了个人的专业课学习笔记</p>
+        <span class="status-tag">完善中</span>
         <span class="tag">学习笔记</span>
       </article>
 
@@ -68,8 +68,6 @@
         <p>记录了各大游戏的数值拆解</p>
       </article>
     </section>
-
-    <!-- TODO 4：在这里新增一个 section，id 叫 current，标题叫 当前学习进度 -->
     <section id="current">
       <h2>学习进度</h2>
     </section>
@@ -77,7 +75,7 @@
     <section id="contact">
       <h2>联系方式</h2>
       <p>邮箱：jiaydeng@163.com</p>
-      <p>GitHub：mnfe2o4</p>
+      <p>GitHub：<a href="https://github.com/mnfe2o4" target="_blank">mnfe2o4</a></p>
     </section>
   </main>
 
@@ -86,4 +84,5 @@
   </footer>
 
 </body>
+
 </html>

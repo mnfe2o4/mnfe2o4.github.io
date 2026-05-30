@@ -6,29 +6,27 @@ body {
   color: #222;
 }
 
-/* 文章页和首页通用的顶部区域 */
 header {
-  margin: 10px auto 24px auto;
+  margin: 20px auto 24px auto;
   padding: 32px 24px;
   text-align: center;
-  background-color: #ddd;
-  max-width: 900px;
+  background-color: #333;
+  max-width: 1000px;
   border-radius: 20px;
+  margin-top: 20px;
 }
 
-/* 顶部大标题 */
 header h1 {
   margin-bottom: 12px;
   font-size: 36px;
+  color: white;
 }
 
-/* 顶部简介文字 */
 header p {
   font-size: 18px;
   color: #666;
 }
 
-/* TODO 5：让顶部区域变成深色背景、白色文字 */
 .site-header {
   background-color: #003d76;
   color: white;
@@ -37,7 +35,6 @@ header p {
   border-radius: 20px;
 }
 
-/* TODO 6：让 top-bar 里的站点名和导航链接左右排列 */
 .top-bar {
   max-width: 900px;
   margin: 0 auto;
@@ -47,13 +44,17 @@ header p {
   align-items: center;
 }
 
-/* TODO 7：设置站点名更醒目 */
 .site-name {
-  font-size: 24px;
-  font-weight: bold;
+  font-size: 20px;
+  font-weight: 600;
+  color: whitesmoke;
 }
 
-/* TODO 8：设置导航链接样式 */
+.nav-links {
+  display: flex;
+  align-items: center;
+}
+
 .nav-links a {
   color: whitesmoke;
   text-decoration: none;
@@ -86,14 +87,12 @@ header p {
   color: #ddd;
 }
 
-/* TODO 9：限制 main 宽度，并让它居中 */
 main {
   max-width: 900px;
   margin: 30px auto;
   padding: 0 20px;
 }
 
-/* TODO 10：让每个 section 变成白色卡片 */
 section {
   background-color: white;
   padding: 24px;
@@ -105,7 +104,11 @@ h2 {
   color: #263238;
 }
 
-/* TODO 11：给文章卡片添加边框、内边距、圆角 */
+.work-list {
+  display: grid;
+  gap: 16px;
+}
+
 .work-card {
   border: 1px solid #ddd;
   padding: 16px;
@@ -114,7 +117,6 @@ h2 {
   background-color: #fafafa;
 }
 
-/* TODO 12：给标签做成小胶囊样式 */
 .tag {
   display: inline-block;
   background-color: #e0f2f1;
@@ -125,7 +127,16 @@ h2 {
   margin-right: 8px;
 }
 
-/* 基础表格样式 */
+.status-tag {
+  display: inline-block;
+  background-color: #ddd;
+  color: #333;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  margin-right: 8px;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
