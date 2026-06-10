@@ -3,83 +3,132 @@
 
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="MNFE2O4 的个人主页，整理课程学习笔记、网页搭建记录、数学公式与游戏数值分析内容。">
+  <meta name="theme-color" content="#0e3a5d">
   <title>MNFE2O4个人主页</title>
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
+  <a class="skip-link" href="#main-content">跳转到主要内容</a>
 
   <header class="site-header">
     <div class="top-bar">
-      <nav class="nav-links">
+      <a class="site-name" href="index.html">MNFE2O4</a>
+      <nav class="nav-links" aria-label="主导航">
         <a href="about.html">关于我</a>
         <a href="#works">文章列表</a>
+        <a href="#current">学习进度</a>
         <a href="#contact">联系方式</a>
       </nav>
     </div>
 
     <div class="hero">
+      <p class="eyebrow">Personal Notes and Experiments</p>
       <h1>MNFE2O4的秘密空间</h1>
-      <p>学习笔记和兴之所至</p>
+      <p class="hero-text">把课程学习、网页搭建、公式整理和游戏数值分析，慢慢积累成一份能持续更新的个人档案。</p>
     </div>
   </header>
 
-  <main>
-    <section id="introduction" class="card">
-      <h2>网站简介</h2>
+  <main id="main-content">
+    <section id="introduction" class="card intro-card">
+      <div class="section-heading">
+        <p class="section-label">网站简介</p>
+        <h2>这是一个逐步生长的个人知识库</h2>
+      </div>
       <p>
-        这是我的个人作品集网站，用来整理课程学习笔记、网页搭建过程、数学公式记录，
-        以及未来的游戏数值拆解案例。
+        这个站点目前主要收录课程学习笔记、网页搭建过程、数学公式记录，以及未来会持续补充的游戏数值拆解内容。
       </p>
       <p>
-        当前网站仍在持续完善中，重点是先建立清晰的文章结构和可长期维护的发布流程。
+        现阶段的重点不是堆很多页面，而是先把内容组织方式、页面结构和发布流程打磨清楚，让它更适合长期维护。
       </p>
     </section>
 
-    <section id="works" class="work-list">
-      <h2>文章列表</h2>
-      <article class="work-card">
-        <h3>
-          <a href="articles/statistics.html">数学学习笔记</a>
-        </h3>
-        <p>收录了个人的专业课学习笔记</p>
-        <span class="status-tag">完善中</span>
-        <span class="tag">学习笔记</span>
-      </article>
+    <section id="works" class="card">
+      <div class="section-heading">
+        <p class="section-label">文章列表</p>
+        <h2>已经发布的内容</h2>
+      </div>
 
-      <article class="work-card">
-        <h3>
-          <a href="articles/second_note.html">HTML与网页搭建学习</a>
-        </h3>
-        <p>记录了搭建个人主页的全流程以及HTML学习笔记</p>
-        <span class="tag">学习笔记</span>
-      </article>
+      <div class="work-list">
+        <article class="work-card">
+          <div class="work-card-header">
+            <span class="status-tag">完善中</span>
+            <span class="tag">学习笔记</span>
+          </div>
+          <h3><a href="articles/statistics.html">数理统计知识整理</a></h3>
+          <p>整理课程学习过程中常见分布、公式与基本概念之间的联系。</p>
+          <a class="text-link" href="articles/statistics.html">阅读全文</a>
+        </article>
 
-      <article class="work-card">
-        <h3>游戏数值设计笔记</h3>
-        <p>记录了学习游戏数值设计时的感想和笔记</p>
-      </article>
+        <article class="work-card">
+          <div class="work-card-header">
+            <span class="status-tag">持续更新</span>
+            <span class="tag">网页搭建</span>
+          </div>
+          <h3><a href="articles/second_note.html">HTML与网页搭建学习</a></h3>
+          <p>记录个人主页从零搭建的过程，以及 HTML 基础语法学习笔记。</p>
+          <a class="text-link" href="articles/second_note.html">阅读全文</a>
+        </article>
 
-      <article class="work-card">
-        <h3>游戏数值拆解案例</h3>
-        <p>记录了各大游戏的数值拆解</p>
-      </article>
+        <article class="work-card muted-card">
+          <div class="work-card-header">
+            <span class="status-tag status-tag--soft">计划中</span>
+            <span class="tag">游戏数值</span>
+          </div>
+          <h3>游戏数值设计笔记</h3>
+          <p>准备记录成长曲线、资源投放和系统节奏设计中的关键观察。</p>
+        </article>
+
+        <article class="work-card muted-card">
+          <div class="work-card-header">
+            <span class="status-tag status-tag--soft">计划中</span>
+            <span class="tag">分析文章</span>
+          </div>
+          <h3>游戏数值拆解案例</h3>
+          <p>未来会补充具体游戏的系统拆解、概率分析和数值体验观察。</p>
+        </article>
+      </div>
     </section>
-    <section id="current">
-      <h2>学习进度</h2>
+
+    <section id="current" class="card">
+      <div class="section-heading">
+        <p class="section-label">学习进度</p>
+        <h2>当前正在推进的方向</h2>
+      </div>
+
+      <div class="progress-grid">
+        <article class="progress-item">
+          <h3>网页结构整理</h3>
+          <p>统一首页、文章页和 404 页的导航、信息层级和移动端表现。</p>
+        </article>
+
+        <article class="progress-item">
+          <h3>课程笔记整理</h3>
+          <p>继续把数理统计与相关课程中的公式、分布关系和例题思路沉淀下来。</p>
+        </article>
+
+        <article class="progress-item">
+          <h3>游戏数值分析准备</h3>
+          <p>先搭好内容框架，后续再逐步补具体案例和分析方法。</p>
+        </article>
+      </div>
     </section>
 
-    <section id="contact">
-      <h2>联系方式</h2>
-      <p>邮箱：jiaydeng@163.com</p>
-      <p>GitHub：<a href="https://github.com/mnfe2o4" target="_blank">mnfe2o4</a></p>
+    <section id="contact" class="card">
+      <div class="section-heading">
+        <p class="section-label">联系方式</p>
+        <h2>可以在这些地方找到我</h2>
+      </div>
+      <p>邮箱：<a href="mailto:jiaydeng@163.com">jiaydeng@163.com</a></p>
+      <p>GitHub：<a href="https://github.com/mnfe2o4" target="_blank" rel="noreferrer">mnfe2o4</a></p>
     </section>
   </main>
 
-  <footer>
-    <p>© 2026 我的作品集</p>
+  <footer class="site-footer">
+    <p>© 2026 MNFE2O4 的作品集</p>
   </footer>
-
 </body>
 
 </html>

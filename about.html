@@ -1,45 +1,56 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
   <meta charset="UTF-8">
-  <title>关于我｜我的作品集</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="关于 MNFE2O4：关注课程学习、网页搭建、公式整理与游戏数值分析。">
+  <meta name="theme-color" content="#0e3a5d">
+  <title>关于我｜MNFE2O4</title>
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-  <header class="site-header">
+  <a class="skip-link" href="#main-content">跳转到主要内容</a>
+
+  <header class="site-header site-header--compact">
     <div class="top-bar">
-      <nav class="nav-links">
+      <a class="site-name" href="index.html">MNFE2O4</a>
+      <nav class="nav-links" aria-label="主导航">
         <a href="index.html">首页</a>
-        <a href="about.html">关于我</a>
+        <a href="about.html" aria-current="page">关于我</a>
         <a href="index.html#works">文章列表</a>
         <a href="index.html#contact">联系方式</a>
       </nav>
-      
-      <div class="site-name">MNFE2O4</div>
     </div>
 
-
-
-    <h1>关于我</h1>
-
+    <div class="hero hero--compact">
+      <p class="eyebrow">About This Site</p>
+      <h1>关于我</h1>
+      <p class="hero-text">把正在学习的内容整理成可回看、可扩展、也更像自己的个人站点。</p>
+    </div>
   </header>
 
-  <main>
+  <main id="main-content">
     <section class="card">
-      <h2>我是谁</h2>
+      <div class="section-heading">
+        <p class="section-label">我是谁</p>
+        <h2>正在把兴趣和学习过程留下来的人</h2>
+      </div>
       <p>
-        我正在学习使用 HTML、CSS、Markdown、MathJax 和 GitHub Pages
-        搭建个人作品集网站。
+        我正在学习使用 HTML、CSS、Markdown、MathJax 和 GitHub Pages 搭建个人作品集网站。
       </p>
       <p>
-        这个网站目前主要用于整理课程学习笔记、游戏数值拆解、分析文章和公式推导内容。
+        这个网站目前主要用于整理课程学习笔记、游戏数值拆解、分析文章和公式推导内容，也会记录网页本身的迭代过程。
       </p>
     </section>
 
     <section class="card">
-      <h2>我关注的方向</h2>
-      <ul>
+      <div class="section-heading">
+        <p class="section-label">关注方向</p>
+        <h2>目前最想持续深入的主题</h2>
+      </div>
+      <ul class="feature-list">
         <li>游戏数值设计与系统拆解</li>
         <li>概率、期望与成长曲线分析</li>
         <li>课程学习笔记整理</li>
@@ -48,9 +59,11 @@
     </section>
 
     <section class="card">
-      <h2>这个网站会放什么</h2>
-      <p>目前计划包含以下内容：</p>
-      <ul>
+      <div class="section-heading">
+        <p class="section-label">内容规划</p>
+        <h2>这个网站接下来会放什么</h2>
+      </div>
+      <ul class="feature-list">
         <li>学习笔记：记录网页搭建、Markdown、数学公式等内容。</li>
         <li>分析文章：拆解游戏系统、资源系统、抽卡期望等主题。</li>
         <li>作品展示：整理我完成过的练习、文章和项目。</li>
@@ -58,15 +71,18 @@
     </section>
 
     <section class="card">
-      <h2>联系方式</h2>
-      <p>邮箱：jiaydeng@163.com</p>
-      <p>GitHub：<a href="https://github.com/mnfe2o4" target="_blank">mnfe2o4</a></p>
+      <div class="section-heading">
+        <p class="section-label">联系方式</p>
+        <h2>欢迎交流</h2>
+      </div>
+      <p>邮箱：<a href="mailto:jiaydeng@163.com">jiaydeng@163.com</a></p>
+      <p>GitHub：<a href="https://github.com/mnfe2o4" target="_blank" rel="noreferrer">mnfe2o4</a></p>
     </section>
   </main>
 
-  <footer>
-    MnFe2O4的作品集 |
-    <a href="../index.html">首页</a>
+  <footer class="site-footer">
+    <p>© 2026 MNFE2O4 的作品集</p>
   </footer>
 </body>
+
 </html>

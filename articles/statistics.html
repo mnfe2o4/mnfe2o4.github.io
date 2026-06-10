@@ -3,10 +3,11 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>数理统计知识整理</title>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="数理统计知识整理：记录常见分布关系、公式示例与课程学习中的关键知识点。">
+    <meta name="theme-color" content="#0e3a5d">
+    <title>数理统计知识整理｜MNFE2O4</title>
     <link rel="stylesheet" href="../style.css">
-
     <script>
         MathJax = {
             tex: {
@@ -19,131 +20,139 @@
 </head>
 
 <body>
-    <header>
+    <a class="skip-link" href="#main-content">跳转到主要内容</a>
+
+    <header class="site-header site-header--compact">
         <div class="top-bar">
-            <nav class="nav-links">
+            <a class="site-name" href="../index.html">MNFE2O4</a>
+            <nav class="nav-links" aria-label="主导航">
                 <a href="../index.html">首页</a>
                 <a href="../about.html">关于我</a>
                 <a href="../index.html#works">文章列表</a>
                 <a href="../index.html#contact">联系方式</a>
             </nav>
-
-            <div class="site-name">MNFE2O4</div>
         </div>
-        <h1>数理统计知识整理</h1>
+
+        <div class="hero hero--compact">
+            <p class="eyebrow">Learning Notes</p>
+            <h1>数理统计知识整理</h1>
+            <p class="hero-text">把课程里经常反复出现的分布、公式和关系放在同一页，方便复习和后续补充。</p>
+        </div>
     </header>
 
-    <main>
-        <section class="card">
-            <h2>文章简介</h2>
-            <p>
-                这篇文章整理了数理统计学习过程中个人遇到的一些重要的知识和公式梳理。
-            </p>
-        </section>
+    <main id="main-content">
+        <article class="article-shell">
+            <section class="card">
+                <div class="section-heading">
+                    <p class="section-label">文章简介</p>
+                    <h2>这篇文章在整理什么</h2>
+                </div>
+                <p>
+                    这篇文章整理了数理统计学习过程中个人遇到的一些重要知识点，以及后续复习时最常回头查找的公式。
+                </p>
+            </section>
 
-        <section class="card">
-            <h2>各分布之间的关系</h2>
-            <p>
-                梳理了数理统计中常用到的一些分布和分布之间的关系。
-            </p>
+            <section class="card">
+                <div class="section-heading">
+                    <p class="section-label">分布关系</p>
+                    <h2>各分布之间的联系</h2>
+                </div>
+                <p>
+                    这里先梳理数理统计中常用到的一些分布及它们之间的转换关系。
+                </p>
 
-            <h3>Gamma分布族</h3>
-            <p>
-                Gamma分布\(\Gamma(\gamma, \lambda)\)有两个重要的参数：形状参数 \(\gamma\) 和尺度参数 \(\lambda\)。Gamma分布的密度函数为：
-                \[
-                f(x; \gamma, \lambda) = \frac{\lambda^\gamma}{\Gamma(\gamma)} x^{\gamma - 1} e^{-\lambda x}
-                \operatorname{1}_{\{x>0\}}
-                \]
-                其中，\(\Gamma(\gamma)\) 是 Gamma 函数，定义为：
-                \[
-                \Gamma(\gamma) = \int_0^\infty t^{\gamma - 1} e^{-t} dt
-                \]
-                Gamma分布族包含了很多重要的分布，例如：
-            <ul>
-                <li>当 \(\gamma = 1\) 时，Gamma分布退化为指数分布：\(\Gamma(1, \lambda) \sim \operatorname{Exp}(\lambda)\)</li>
-                <li>当 \(\gamma = \dfrac{n}{2}, \lambda = \dfrac{1}{2}\) 时，Gamma分布退化为卡方分布：\(\Gamma(\dfrac{n}{2},
-                    \dfrac{1}{2}) \sim \chi^2(n)\)</li>
-            </ul>
+                <h3>Gamma 分布族</h3>
+                <p>
+                    Gamma 分布 \(\Gamma(\gamma, \lambda)\) 有两个重要参数：形状参数 \(\gamma\) 和尺度参数 \(\lambda\)。其密度函数为：
+                </p>
+                <p>
+                    \[
+                    f(x; \gamma, \lambda) = \frac{\lambda^\gamma}{\Gamma(\gamma)} x^{\gamma - 1} e^{-\lambda x}
+                    \operatorname{1}_{\{x>0\}}
+                    \]
+                </p>
+                <p>
+                    其中，\(\Gamma(\gamma)\) 是 Gamma 函数，定义为：
+                </p>
+                <p>
+                    \[
+                    \Gamma(\gamma) = \int_0^\infty t^{\gamma - 1} e^{-t} dt
+                    \]
+                </p>
+                <p>Gamma 分布族包含了很多重要分布，例如：</p>
+                <ul class="feature-list">
+                    <li>当 \(\gamma = 1\) 时，Gamma 分布退化为指数分布：\(\Gamma(1, \lambda) \sim \operatorname{Exp}(\lambda)\)</li>
+                    <li>当 \(\gamma = \dfrac{n}{2}, \lambda = \dfrac{1}{2}\) 时，Gamma 分布退化为卡方分布：\(\Gamma(\dfrac{n}{2}, \dfrac{1}{2}) \sim \chi^2(n)\)</li>
+                </ul>
 
-            Gamma分布的性质：
-            <ul>
-                <li>Gamma分布的倍数也服从Gamma分布：如果 \(X \sim \Gamma(\gamma, \lambda)\)，那么对于任意常数 \(c > 0\)，\(cX \sim
-                    \Gamma(\gamma, \dfrac{\lambda}{c})\)。</li>
-                <li>Gamma分布的和也服从Gamma分布：如果 \(X_1 \sim \Gamma(\gamma_1, \lambda)\) 和 \(X_2 \sim \Gamma(\gamma_2,
-                    \lambda)\) 是独立的，那么
-                    \[X_1 + X_2 \sim \Gamma(\gamma_1 + \gamma_2, \lambda)\]</li>
-                <li>推论：如果 \(X_1, X_2, \ldots, X_n \overset{\text{i.i.d.}}{\sim} \operatorname{Exp}(\lambda)\)，设 \(Y =
-                    \sum_{i=1}^n X_i\)，则 \(2\lambda Y \sim \chi^2(2n)\)。</li>
-            </ul>
+                <p>Gamma 分布的一些常见性质：</p>
+                <ul class="feature-list">
+                    <li>若 \(X \sim \Gamma(\gamma, \lambda)\)，则对任意常数 \(c > 0\)，有 \(cX \sim \Gamma(\gamma, \dfrac{\lambda}{c})\)。</li>
+                    <li>若 \(X_1 \sim \Gamma(\gamma_1, \lambda)\) 和 \(X_2 \sim \Gamma(\gamma_2, \lambda)\) 相互独立，则 \(X_1 + X_2 \sim \Gamma(\gamma_1 + \gamma_2, \lambda)\)。</li>
+                    <li>若 \(X_1, X_2, \ldots, X_n \overset{\text{i.i.d.}}{\sim} \operatorname{Exp}(\lambda)\)，设 \(Y = \sum_{i=1}^n X_i\)，则 \(2\lambda Y \sim \chi^2(2n)\)。</li>
+                </ul>
+            </section>
 
+            <section class="card">
+                <div class="section-heading">
+                    <p class="section-label">公式示例</p>
+                    <h2>LaTeX 公式展示</h2>
+                </div>
+                <p>
+                    在游戏数值分析中，我们经常会计算某个随机奖励的期望。如果一个随机变量 \(X\) 有多个可能结果，那么它的期望可以写成：
+                </p>
+                <p>
+                    \[
+                    E(X)=\sum_i x_i p_i
+                    \]
+                </p>
+                <p>
+                    其中，\(x_i\) 表示第 \(i\) 种可能结果，\(p_i\) 表示这个结果出现的概率。
+                </p>
+            </section>
 
+            <section class="card">
+                <div class="section-heading">
+                    <p class="section-label">表格示例</p>
+                    <h2>基础数值表格</h2>
+                </div>
+                <p>
+                    下面用一个简单表格记录不同等级的经验值需求。以后可以把它替换成游戏系统拆解、概率分析或课程笔记中的数据。
+                </p>
 
+                <table>
+                    <thead>
+                        <tr>
+                            <th>等级</th>
+                            <th>所需经验</th>
+                            <th>说明</th>
+                        </tr>
+                    </thead>
 
-            </p>
-        </section>
-
-        <section class="card">
-            <h2>LaTeX 公式示例</h2>
-
-            <p>
-                在游戏数值分析中，我们经常会计算某个随机奖励的期望。
-                如果一个随机变量 \(X\) 有多个可能结果，那么它的期望可以写成：
-            </p>
-
-            <p>
-                \[
-                E(X)=\sum_i x_i p_i
-                \]
-            </p>
-
-            <p>
-                其中，\(x_i\) 表示第 \(i\) 种可能结果，\(p_i\) 表示这个结果出现的概率。
-            </p>
-        </section>
-
-        <section class="card">
-            <h2>基础数值表格示例</h2>
-
-            <p>
-                下面用一个简单表格记录不同等级的经验值需求。以后可以把它替换成
-                游戏系统拆解、概率分析或课程笔记中的数据。
-            </p>
-
-            <table>
-                <thead>
-                    <tr>
-                        <th>等级</th>
-                        <th>所需经验</th>
-                        <th>说明</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>0</td>
-                        <td>初始等级</td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>100</td>
-                        <td>完成新手阶段</td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>250</td>
-                        <td>开始进入成长阶段</td>
-                    </tr>
-                </tbody>
-            </table>
-        </section>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>0</td>
+                            <td>初始等级</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>100</td>
+                            <td>完成新手阶段</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>250</td>
+                            <td>开始进入成长阶段</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+        </article>
     </main>
 
-    <footer>
-        <p>
-            MnFe2O4的作品集 |
-            <a href="../index.html">首页</a>
-        </p>
+    <footer class="site-footer">
+        <p>© 2026 MNFE2O4 的作品集</p>
     </footer>
 </body>
 
