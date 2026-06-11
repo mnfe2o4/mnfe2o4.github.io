@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 
 <head>
@@ -39,14 +39,15 @@
     </header>
     <main id="main-content">
         <article class="article-shell">
-            <section class="card">
+
+<section class="card">
                 <div class="section-heading">
                     <p class="section-label">文章简介</p>
                     <h2>这份复习笔记涵盖什么</h2>
                 </div>
                 <p>这份笔记按章节整理了寿险精算数学中最常见的生存模型、死亡保险、生存年金、净保费、责任准备金与多生命模型公式，适合作为期末复习时的提纲。</p>
             </section>
-            <section class="card">
+<section class="card">
                 <div class="section-heading">
                     <p class="section-label">基础约定</p>
                     <h2>0. 通用符号</h2>
@@ -82,1581 +83,1274 @@
             <section class="card">
                 <div class="section-heading">
                     <p class="section-label">章节内容</p>
-                    <h2>第 1 章 单生命生存模型</h2>
+                    <h2>1. 单生命生存模型</h2>
                 </div>
-                <h3>1.1 寿命、生存函数与密度函数</h3>
-                <p>设新生个体寿命为随机变量 \(X\)。其分布函数、密度函数、生存函数分别为</p>
-                <p>
-                    \[
-                    F_X(x)=P(X\le x),\qquad f_X(x)=F_X&#39;(x),\qquad s(x)=P(X&gt;x)=1-F_X(x).
-                    \]
+                <h3>1.1 寿命、生存函数与剩余寿命</h3>
+                <p>设新生个体的寿命为随机变量 \(X\)。其分布函数、密度函数与生存函数分别为</p>
+                <p class="math-block">
+\[
+F_X(x)=\mathbb{P}(0\le X\le x),\qquad f_X(x)=F_X&#39;(x),
+\]
+                </p>
+                <p class="math-block">
+\[
+s(x)=\mathbb{P}(X&gt;x)=1-F_X(x),
+\]
                 </p>
                 <p>因此</p>
-                <p>
-                    \[
-                    f_X(x)=-\frac{d}{dx}s(x).
-                    \]
-                </p>
-                <p>生存函数 \(s(x)\) 表示新生个体能活过 \(x\) 岁的概率。寿险中更常研究已经生存到 \(x\) 岁的个体未来还能活多久。</p>
-                <h3>1.2 \(x\) 岁个体的未来寿命分布</h3>
-                <p>对已经生存到 \(x\) 岁的个体，未来寿命为</p>
-                <p>
-                    \[
-                    T(x)=X-x\mid X&gt;x.
-                    \]
-                </p>
-                <p>其分布函数为</p>
-                <p>
-                    \[
-                    F_{T(x)}(t)=P(T(x)\le t)=1-\frac{s(x+t)}{s(x)}.
-                    \]
-                </p>
-                <p>因此定义</p>
-                <p>
-                    \[
-                    {}_tp_x=P(T(x)&gt;t)=\frac{s(x+t)}{s(x)},
-                    \]
-                </p>
-                <p>
-                    \[
-                    {}_tq_x=P(T(x)\le t)=1-{}_tp_x.
-                    \]
-                </p>
-                <p>其中：</p>
-                <ul class="feature-list">
-                    <li>\({}_tp_x\)：\((x)\) 至少再活 \(t\) 年的概率；</li>
-                    <li>\({}_tq_x\)：\((x)\) 在未来 \(t\) 年内死亡的概率；</li>
-                    <li>当 \(t=1\) 时，记 \(p_x={}_1p_x\)，\(q_x={}_1q_x\)。</li>
-                </ul>
-                <p>未来寿命密度函数为</p>
-                <p>
-                    \[
-                    f_{T(x)}(t)=\frac{f_X(x+t)}{s(x)}.
-                    \]
-                </p>
-                <h3>1.3 延期死亡概率与乘法公式</h3>
-                <p>延期死亡概率：</p>
-                <p>
-                    \[
-                    {}_{u|t}q_x=P(u&lt;T(x)\le u+t).
-                    \]
-                </p>
-                <p>它可以写成</p>
-                <p>
-                    \[
-                    {}_{u|t}q_x={}_up_x\,{}_tq_{x+u}={}_up_x-{}_{u+t}p_x.
-                    \]
-                </p>
-                <p>当 \(t=1\) 时，常简写为</p>
-                <p>
-                    \[
-                    {}_{u|}q_x={}_{u|1}q_x.
-                    \]
-                </p>
-                <p>生存概率满足乘法公式：</p>
-                <p>
-                    \[
-                    {}_tp_x={}_hp_x\,{}_{t-h}p_{x+h},\qquad 0&lt;h&lt;t.
-                    \]
-                </p>
-                <p>这个公式的含义是：先从 \(x\) 活到 \(x+h\)，再从 \(x+h\) 活 \(t-h\) 年。</p>
-                <h3>1.4 死亡力</h3>
-                <p>死亡力定义为瞬时死亡率：</p>
-                <p>
-                    \[
-                    \mu_x=\frac{f_X(x)}{s(x)}.
-                    \]
-                </p>
-                <p>对 \((x)\) 的未来寿命，有</p>
-                <p>
-                    \[
-                    f_{T(x)}(t)={}_tp_x\mu_{x+t}.
-                    \]
-                </p>
-                <p>同时</p>
-                <p>
-                    \[
-                    \frac{d}{dt}{}_tp_x=-{}_tp_x\mu_{x+t}.
-                    \]
-                </p>
-                <p>因此，若已知死亡力，则</p>
-                <p>
-                    \[
-                    {}_tp_x=\exp\left(-\int_0^t\mu_{x+s}\,ds\right).
-                    \]
-                </p>
-                <h3>1.5 整值未来寿命</h3>
-                <p>整值未来寿命为</p>
-                <p>
-                    \[
-                    K(x)=\lfloor T(x)\rfloor.
-                    \]
-                </p>
-                <p>它表示 \((x)\) 未来能够完整活过的年数。</p>
-                <p>其概率分布为</p>
-                <p>
-                    \[
-                    P(K(x)=k)=P(k\le T(x)&lt;k+1)={}_kp_x-{}_{k+1}p_x={}_{k|}q_x,
-                    \]
-                </p>
-                <p>其中 \(k=0,1,2,\ldots\)。</p>
-                <h3>1.6 期望余命</h3>
-                <p>完全期望余命：</p>
-                <p>
-                    \[
-                    \mathring e_x=E[T(x)]=\int_0^\infty {}_tp_x\,dt.
-                    \]
-                </p>
-                <p>整值期望余命：</p>
-                <p>
-                    \[
-                    e_x=E[K(x)]=\sum_{k=1}^\infty {}_kp_x.
-                    \]
-                </p>
-                <p>整值期望余命递推式：</p>
-                <p>
-                    \[
-                    e_x=p_x+p_xe_{x+1}.
-                    \]
-                </p>
-                <p>这个递推式的含义是：若 \((x)\) 能活过第一年，则先贡献 1 年，再加上 \((x+1)\) 的未来整值期望余命。</p>
-                <h3>1.7 生命表函数</h3>
-                <p>生命表中常用 \(\ell_x\) 表示期初生存人数，\(d_x\) 表示 \([x,x+1)\) 年龄段死亡人数。基本关系为</p>
-                <p>
-                    \[
-                    {}_tp_x=\frac{\ell_{x+t}}{\ell_x},\qquad {}_tq_x=\frac{{}_td_x}{\ell_x},\qquad
-                    {}_td_x=\ell_x-\ell_{x+t}.
-                    \]
-                </p>
-                <p>特别地，</p>
-                <p>
-                    \[
-                    d_x=\ell_x-\ell_{x+1},\qquad q_x=\frac{d_x}{\ell_x},\qquad p_x=\frac{\ell_{x+1}}{\ell_x}.
-                    \]
-                </p>
-                <p>若用连续死亡力表示生命表函数，则</p>
-                <p>
-                    \[
-                    \ell_{x+t}=\ell_x\exp\left(-\int_x^{x+t}\mu_s\,ds\right).
-                    \]
-                </p>
-                <h3>1.8 常用参数寿命模型</h3>
-                <h4>1. de Moivre 模型</h4>
-                <p>若极限年龄为 \(\omega\)，则</p>
-                <p>
-                    \[
-                    s(x)=1-\frac{x}{\omega},\qquad 0\le x\le \omega.
-                    \]
-                </p>
-                <p>死亡力为</p>
-                <p>
-                    \[
-                    \mu_x=\frac{1}{\omega-x}.
-                    \]
-                </p>
-                <p>对 \((x)\)，</p>
-                <p>
-                    \[
-                    {}_tp_x=\frac{\omega-x-t}{\omega-x},\qquad 0\le t\le \omega-x.
-                    \]
-                </p>
-                <h4>2. Gompertz 模型</h4>
-                <p>若</p>
-                <p>
-                    \[
-                    \mu_x=BC^x,
-                    \]
-                </p>
-                <p>则</p>
-                <p>
-                    \[
-                    s(x)=\exp\left[-\frac{B}{\ln C}(C^x-1)\right].
-                    \]
-                </p>
-                <h4>3. Makeham 模型</h4>
-                <p>若</p>
-                <p>
-                    \[
-                    \mu_x=A+BC^x,
-                    \]
-                </p>
-                <p>则</p>
-                <p>
-                    \[
-                    s(x)=\exp\left[-Ax-\frac{B}{\ln C}(C^x-1)\right].
-                    \]
-                </p>
-                <h4>4. Weibull 模型</h4>
-                <p>若</p>
-                <p>
-                    \[
-                    \mu_x=kx^n,
-                    \]
-                </p>
-                <p>则</p>
-                <p>
-                    \[
-                    s(x)=\exp\left(-\frac{k}{n+1}x^{n+1}\right).
-                    \]
-                </p>
-                <h3>1.9 分数年龄假设</h3>
-                <p>生命表通常只给出整数年龄的死亡率。要处理非整数年龄，需要对每个年龄年内的分布作假设。</p>
-                <h4>1. UDD 假设</h4>
-                <p>UDD 是死亡均匀分布假设。对 \(0\le t\le 1\)，定义</p>
-                <p>
-                    \[
-                    s(x+t)=(1-t)s(x)+ts(x+1).
-                    \]
-                </p>
-                <p>等价地，生命表人数满足</p>
-                <p>
-                    \[
-                    \ell_{x+t}=(1-t)\ell_x+t\ell_{x+1}.
-                    \]
-                </p>
-                <p>主要公式：</p>
-                <p>
-                    \[
-                    {}_tq_x=tq_x,
-                    \]
-                </p>
-                <p>
-                    \[
-                    {}_tp_x=1-tq_x,
-                    \]
-                </p>
-                <p>
-                    \[
-                    f_{T(x)}(t)=q_x,
-                    \]
-                </p>
-                <p>
-                    \[
-                    \mu_{x+t}=\frac{q_x}{1-tq_x},\qquad 0&lt;t&lt;1.
-                    \]
-                </p>
-                <p>若从 \(x+t\) 再看未来 \(u\) 年，且 \(t+u\le 1\)，则</p>
-                <p>
-                    \[
-                    {}_uq_{x+t}=\frac{uq_x}{1-tq_x}.
-                    \]
-                </p>
-                <p>若每一年都满足 UDD，则 \(K(x)\) 与 \(S(x)\) 独立，且</p>
-                <p>
-                    \[
-                    S(x)\sim U(0,1).
-                    \]
-                </p>
-                <p>因此</p>
-                <p>
-                    \[
-                    \mathring e_x=e_x+\frac12.
-                    \]
-                </p>
-                <h4>2. 常数死亡力假设</h4>
-                <p>常数死亡力假设为</p>
-                <p>
-                    \[
-                    \ln s(x+t)=(1-t)\ln s(x)+t\ln s(x+1),\qquad 0\le t&lt;1.
-                    \]
-                </p>
-                <p>主要公式：</p>
-                <p>
-                    \[
-                    \mu_{x+t}=-\ln p_x,
-                    \]
-                </p>
-                <p>
-                    \[
-                    {}_tp_x=p_x^t,
-                    \]
-                </p>
-                <p>
-                    \[
-                    {}_tq_x=1-p_x^t.
-                    \]
-                </p>
-                <h4>3. Balducci 假设</h4>
-                <p>Balducci 假设为</p>
-                <p>
-                    \[
-                    \frac{1}{s(x+t)}=\frac{1-t}{s(x)}+\frac{t}{s(x+1)},\qquad 0\le t&lt;1.
-                    \]
-                </p>
-                <p>主要公式：</p>
-                <p>
-                    \[
-                    {}_tq_x=\frac{tq_x}{1-(1-t)q_x},
-                    \]
-                </p>
-                <p>
-                    \[
-                    {}_tp_x=\frac{p_x}{1-(1-t)q_x},
-                    \]
-                </p>
-                <p>
-                    \[
-                    \mu_{x+t}=\frac{q_x}{1-(1-t)q_x}.
-                    \]
-                </p>
-                <h3>1.10 分数年龄三种假设对比</h3>
-                <p>对 \(0&lt;t&lt;1\)：</p>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>假设</th>
-                            <th>\({}_tq_x\)</th>
-                            <th>\({}_tp_x\)</th>
-                            <th>\(\mu_{x+t}\)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>UDD</td>
-                            <td>\(tq_x\)</td>
-                            <td>\(1-tq_x\)</td>
-                            <td>\(\dfrac{q_x}{1-tq_x}\)</td>
-                        </tr>
-                        <tr>
-                            <td>常数死亡力</td>
-                            <td>\(1-p_x^t\)</td>
-                            <td>\(p_x^t\)</td>
-                            <td>\(-\ln p_x\)</td>
-                        </tr>
-                        <tr>
-                            <td>Balducci</td>
-                            <td>\(\dfrac{tq_x}{1-(1-t)q_x}\)</td>
-                            <td>\(\dfrac{p_x}{1-(1-t)q_x}\)</td>
-                            <td>\(\dfrac{q_x}{1-(1-t)q_x}\)</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <p>记忆重点：UDD 下死亡力随年龄年内时间上升，常数死亡力下死亡力不变，Balducci 下死亡力随年龄年内时间下降。</p>
-            </section>
-            <section class="card">
-                <div class="section-heading">
-                    <p class="section-label">章节内容</p>
-                    <h2>第 2 章 死亡保险的精算现值</h2>
-                </div>
-                <h3>2.1 精算现值的基本思想</h3>
-                <p>死亡保险的精算现值等于保险金现值随机变量的期望。构造模型时要明确四件事：</p>
-                <ol class="feature-list">
-                    <li>什么时候给付；</li>
-                    <li>给付金额是多少；</li>
-                    <li>用什么利率折现；</li>
-                    <li>给付事件发生的概率是多少。</li>
-                </ol>
-                <h3>2.2 纯生存保险</h3>
-                <p>\(n\) 年期纯生存保险：若 \((x)\) 生存至 \(n\) 年末，给付 1；否则不给付。</p>
-                <p>现值随机变量：</p>
-                <p>
-                    \[
-                    Z=v^nI_{\{T(x)\ge n\}}.
-                    \]
-                </p>
-                <p>精算现值：</p>
-                <p>
-                    \[
-                    E(Z)=v^n{}_np_x={}_nE_x.
-                    \]
-                </p>
-                <p>在寿险中也常记为</p>
-                <p>
-                    \[
-                    A^1_{x:\overline{n}|}={}_nE_x.
-                    \]
-                </p>
-                <p>这里的 \({}_nE_x\) 又称 \(n\) 年生存因子。</p>
-                <h3>2.3 \(n\) 年定期死亡保险</h3>
-                <p>定期死亡保险：若 \((x)\) 在未来 \(n\) 年内死亡，给付 1；若期满仍生存，则不给付。</p>
-                <h4>2.3.1 死亡后立即给付</h4>
-                <p>现值随机变量：</p>
-                <p>
-                    \[
-                    Z=v^{T(x)}I_{\{T(x)&lt;n\}}.
-                    \]
-                </p>
-                <p>精算现值：</p>
-                <p>
-                    \[
-                    \bar A^1_{x:\overline{n}|}=\int_0^n v^t{}_tp_x\mu_{x+t}\,dt.
-                    \]
-                </p>
-                <p>若要计算 \(j\) 阶矩：</p>
-                <p>
-                    \[
-                    E(Z^j)=\int_0^n e^{-j\delta t}{}_tp_x\mu_{x+t}\,dt.
-                    \]
-                </p>
-                <p>这等于把利息力由 \(\delta\) 改为 \(j\delta\) 后计算同一保险的精算现值。</p>
-                <p>递推分解式：</p>
-                <p>
-                    \[
-                    \bar A^1_{x:\overline{n}|}=\bar A^1_{x:\overline{m}|}+{}_mE_x\bar A^1_{x+m:\overline{n-m}|},\qquad
-                    0&lt;m&lt;n.
-                    \]
-                </p>
-                <h4>2.3.2 死亡保单年度末给付</h4>
-                <p>若死亡发生在第 \(K(x)+1\) 个保单年度，则在该保单年度末给付。</p>
-                <p>现值随机变量：</p>
-                <p>
-                    \[
-                    Z=v^{K(x)+1}I_{\{T(x)&lt;n\}}.
-                    \]
-                </p>
-                <p>精算现值：</p>
-                <p>
-                    \[
-                    A^1_{x:\overline{n}|}=\sum_{k=0}^{n-1}v^{k+1}{}_{k|}q_x.
-                    \]
-                </p>
-                <p>递推式：</p>
-                <p>
-                    \[
-                    A^1_{x:\overline{n}|}=vq_x+vp_xA^1_{x+1:\overline{n-1}|}.
-                    \]
-                </p>
-                <p>生命表形式：</p>
-                <p>
-                    \[
-                    \ell_xA^1_{x:\overline{n}|}=\sum_{k=0}^{n-1}v^{k+1}d_{x+k}.
-                    \]
-                </p>
-                <h4>2.3.3 死亡即刻给付与年末给付的关系</h4>
-                <p>在每一年龄年 UDD 假设下：</p>
-                <p>
-                    \[
-                    \bar A^1_{x:\overline{n}|}=\frac{i}{\delta}A^1_{x:\overline{n}|}.
-                    \]
-                </p>
-                <p>这个关系只适用于死亡给付部分。不能直接套到包含生存给付的整个生死合险上。</p>
-                <h3>2.4 终身寿险</h3>
-                <p>终身寿险：无论何时死亡，都给付 1。</p>
-                <h4>2.4.1 死亡后立即给付</h4>
-                <p>现值随机变量：</p>
-                <p>
-                    \[
-                    Z=v^{T(x)}.
-                    \]
-                </p>
-                <p>精算现值：</p>
-                <p>
-                    \[
-                    \bar A_x=\int_0^\infty v^t{}_tp_x\mu_{x+t}\,dt.
-                    \]
-                </p>
-                <p>\(j\) 阶矩：</p>
-                <p>
-                    \[
-                    E(Z^j)=\int_0^\infty e^{-j\delta t}{}_tp_x\mu_{x+t}\,dt={}^{j}\bar A_x.
-                    \]
-                </p>
-                <p>其中 \({}^{j}\bar A_x\) 表示利息力取 \(j\delta\) 时的 \(\bar A_x\)。</p>
-                <h4>2.4.2 死亡保单年度末给付</h4>
-                <p>现值随机变量：</p>
-                <p>
-                    \[
-                    Z=v^{K(x)+1}.
-                    \]
-                </p>
-                <p>精算现值：</p>
-                <p>
-                    \[
-                    A_x=\sum_{k=0}^\infty v^{k+1}{}_{k|}q_x.
-                    \]
-                </p>
-                <p>递推式：</p>
-                <p>
-                    \[
-                    A_x=vq_x+vp_xA_{x+1}.
-                    \]
-                </p>
-                <p>在 UDD 假设下：</p>
-                <p>
-                    \[
-                    \bar A_x=\frac{i}{\delta}A_x.
-                    \]
-                </p>
-                <h3>2.5 生死合险</h3>
-                <p>生死合险又称两全保险。若 \((x)\) 在 \(n\) 年内死亡，给付死亡保险金；若生存至 \(n\) 年末，给付生存保险金。这里先考虑死亡保险金和生存保险金都为 1。</p>
-                <h4>2.5.1 死亡后立即给付、生存期满给付</h4>
-                <p>现值随机变量：</p>
-                <p>
-                    \[
-                    Z=v^{T(x)\wedge n},
-                    \]
-                </p>
-                <p>其中</p>
-                <p>
-                    \[
-                    T(x)\wedge n=\min\{T(x),n\}.
-                    \]
-                </p>
-                <p>精算现值：</p>
-                <p>
-                    \[
-                    \bar A_{x:\overline{n}|}=\bar A^1_{x:\overline{n}|}+{}_nE_x.
-                    \]
-                </p>
-                <p>递推分解：</p>
-                <p>
-                    \[
-                    \bar A_{x:\overline{n}|}=\bar A^1_{x:\overline{m}|}+{}_mE_x\bar A_{x+m:\overline{n-m}|},\qquad
-                    0&lt;m&lt;n.
-                    \]
-                </p>
-                <h4>2.5.2 死亡年末给付、生存期满给付</h4>
-                <p>现值随机变量：</p>
-                <p>
-                    \[
-                    Z=v^{(K(x)+1)\wedge n}.
-                    \]
-                </p>
-                <p>精算现值：</p>
-                <p>
-                    \[
-                    A_{x:\overline{n}|}=A^1_{x:\overline{n}|}+{}_nE_x.
-                    \]
-                </p>
-                <p>递推式：</p>
-                <p>
-                    \[
-                    A_{x:\overline{n}|}=A^1_{x:\overline{m}|}+{}_mE_xA_{x+m:\overline{n-m}|}.
-                    \]
-                </p>
-                <p>特别地，一年递推形式为</p>
-                <p>
-                    \[
-                    (1+i)A_{x:\overline{n}|}=q_x\left(1-A_{x+1:\overline{n-1}|}\right)+A_{x+1:\overline{n-1}|}.
-                    \]
-                </p>
-                <h4>2.5.3 UDD 下生死合险两种给付方式的关系</h4>
-                <p>在 UDD 假设下，死亡给付部分满足</p>
-                <p>
-                    \[
-                    \bar A^1_{x:\overline{n}|}=\frac{i}{\delta}A^1_{x:\overline{n}|}.
-                    \]
-                </p>
-                <p>但生存给付部分仍为 \({}_nE_x\)，所以</p>
-                <p>
-                    \[
-                    \bar A_{x:\overline{n}|}=\bar A^1_{x:\overline{n}|}+{}_nE_x
-                    =\frac{i}{\delta}A^1_{x:\overline{n}|}+{}_nE_x.
-                    \]
-                </p>
-                <p>又因为</p>
-                <p>
-                    \[
-                    A_{x:\overline{n}|}=A^1_{x:\overline{n}|}+{}_nE_x,
-                    \]
+                <p class="math-block">
+\[
+f_X(x)=-\frac{d}{dx}s(x).
+\]
+                </p>
+                <p>对已经活到 \(x\) 岁的个体，记为 \((x)\)。其未来生存时间，即剩余寿命，为</p>
+                <p class="math-block">
+\[
+T(x)=X-x.
+\]
+                </p>
+                <p>其分布函数、密度函数和生存函数分别记为</p>
+                <p class="math-block">
+\[
+F_{T(x)}(t),\qquad f_{T(x)}(t),\qquad s_{T(x)}(t).
+\]
+                </p>
+                <p>由条件概率可得</p>
+                <p class="math-block">
+\[
+F_{T(x)}(t)=\mathbb{P}(X-x\le t\mid X&gt;x)
+=\frac{\mathbb{P}(x&lt;X\le x+t)}{\mathbb{P}(X&gt;x)}.
+\]
                 </p>
                 <p>所以</p>
-                <p>
-                    \[
-                    \bar A_{x:\overline{n}|}=A_{x:\overline{n}|}+\frac{i-\delta}{\delta}A^1_{x:\overline{n}|}.
-                    \]
+                <p class="math-block">
+\[
+F_{T(x)}(t)=\frac{F_X(x+t)-F_X(x)}{1-F_X(x)}
+=\frac{s(x)-s(x+t)}{s(x)},
+\]
                 </p>
-                <p>注意不能写成 \(\bar A_{x:\overline{n}|}=\dfrac{i}{\delta}A_{x:\overline{n}|}\)。</p>
-                <h4>2.5.4 生死合险方差关系</h4>
-                <p>设</p>
-                <p>
-                    \[
-                    Z=Z_1+Z_2,
-                    \]
+                <p class="math-block">
+\[
+f_{T(x)}(t)=\frac{f_X(x+t)}{s(x)}.
+\]
                 </p>
-                <p>其中 \(Z_1\) 为死亡保险部分现值，\(Z_2\) 为生存保险部分现值。由于死亡给付与生存期满给付不会同时发生，</p>
-                <p>
-                    \[
-                    Z_1Z_2=0.
-                    \]
+                <blockquote>
+                    <p>注：这里 \(x\) 表示已经达到的年龄，\(t\) 表示从 \(x\) 岁开始向后看的未来时间。</p>
+                </blockquote>
+                <h3>1.2 常用生存概率与死亡概率符号</h3>
+                <p class="math-block">
+\[
+{}_tp_x=\mathbb{P}(T(x)&gt;t)=\frac{s(x+t)}{s(x)}.
+\]
                 </p>
-                <p>因此</p>
-                <p>
-                    \[
-                    \operatorname{Var}(Z)=\operatorname{Var}(Z_1)+\operatorname{Var}(Z_2)-2E(Z_1)E(Z_2).
-                    \]
+                <p class="math-block">
+\[
+{}_tq_x=\mathbb{P}(0&lt;T(x)\le t)
+=\frac{s(x)-s(x+t)}{s(x)}=1-{}_tp_x.
+\]
                 </p>
-                <p>所以生死合险的方差小于对应死亡保险和生存保险方差之和。</p>
-                <h3>2.6 延期死亡保险</h3>
-                <h4>2.6.1 延期终身寿险</h4>
-                <p>\(m\) 年延期终身寿险：若 \((x)\) 在前 \(m\) 年内死亡，不给付；若活过 \(m\) 年后死亡，给付 1。</p>
-                <p>死亡即刻给付：</p>
-                <p>
-                    \[
-                    {}_{m|}\bar A_x={}_mE_x\bar A_{x+m}.
-                    \]
+                <p class="math-block">
+\[
+{}_{u|t}q_x=\mathbb{P}(u&lt;T(x)\le u+t)
+=\frac{s(x+u)-s(x+u+t)}{s(x)}.
+\]
                 </p>
-                <p>死亡年末给付：</p>
-                <p>
-                    \[
-                    {}_{m|}A_x={}_mE_xA_{x+m}.
-                    \]
+                <p>进一步有</p>
+                <p class="math-block">
+\[
+{}_{u|t}q_x={}_up_x\,{}_tq_{x+u}={}_up_x-{}_{u+t}p_x.
+\]
                 </p>
-                <p>并且</p>
-                <p>
-                    \[
-                    A_x=A^1_{x:\overline{m}|}+{}_{m|}A_x.
-                    \]
+                <p>当 \(t=1\) 时，简记为</p>
+                <p class="math-block">
+\[
+{}_1p_x=p_x,\qquad {}_1q_x=q_x,
+\]
                 </p>
-                <h4>2.6.2 延期定期寿险</h4>
-                <p>\(m\) 年延期、\(n\) 年期死亡保险：前 \(m\) 年死亡不给付，之后 \(n\) 年内死亡才给付。</p>
-                <p>离散年末给付时：</p>
-                <p>
-                    \[
-                    {}_{m|n}A_x=A^1_{x:\overline{m+n}|}-A^1_{x:\overline{m}|}.
-                    \]
+                <p class="math-block">
+\[
+{}_{u|1}q_x={}_{u|}q_x.
+\]
                 </p>
-                <h3>2.7 每年划分为 \(m\) 个区间</h3>
-                <p>若每年划分为 \(m\) 个等间隔区间，死亡发生所在区间末给付。记</p>
-                <p>
-                    \[
-                    J(x)=\lfloor mS(x)\rfloor.
-                    \]
+                <h3>1.3 整值剩余寿命</h3>
+                <p>记 \(K(x)\) 为 \(T(x)\) 的整数部分，\(S(x)\) 为小数部分，则</p>
+                <p class="math-block">
+\[
+T(x)=K(x)+S(x).
+\]
                 </p>
-                <p>则死亡给付时刻为</p>
-                <p>
-                    \[
-                    K(x)+\frac{J(x)+1}{m}.
-                    \]
-                </p>
-                <p>在 UDD 假设下，\(J(x)\) 在 \(0,1,\ldots,m-1\) 上均匀分布，且与 \(K(x)\) 独立。</p>
-                <p>终身寿险区间末给付的精算现值满足</p>
-                <p>
-                    \[
-                    A_x^{(m)}=\frac{i}{i^{(m)}}A_x,
-                    \]
-                </p>
-                <p>其中</p>
-                <p>
-                    \[
-                    i^{(m)}=m\left((1+i)^{1/m}-1\right).
-                    \]
-                </p>
-                <p>当 \(m\to\infty\) 时，</p>
-                <p>
-                    \[
-                    A_x^{(m)}\to\bar A_x.
-                    \]
-                </p>
-                <h3>2.8 变额寿险</h3>
-                <p>变额寿险的保险金额随死亡时间变化。</p>
-                <h4>2.8.1 一般公式</h4>
-                <p>若死亡即刻给付，时刻 \(t\) 的给付额为 \(b_t\)，则</p>
-                <p>
-                    \[
-                    \operatorname{APV}=\int_0^\infty b_tv^t{}_tp_x\mu_{x+t}\,dt.
-                    \]
-                </p>
-                <p>若死亡年末给付，第 \(k+1\) 个保单年度末给付额为 \(b_{k+1}\)，则</p>
-                <p>
-                    \[
-                    \operatorname{APV}=\sum_{k=0}^\infty b_{k+1}v^{k+1}{}_{k|}q_x.
-                    \]
-                </p>
-                <h4>2.8.2 标准年递增终身寿险</h4>
-                <p>第一年死亡给付 1，第二年死亡给付 2，依此类推。</p>
-                <p>年末给付：</p>
-                <p>
-                    \[
-                    (IA)_x=\sum_{k=0}^\infty (k+1)v^{k+1}{}_{k|}q_x.
-                    \]
-                </p>
-                <h4>2.8.3 标准年递减 \(n\) 年期寿险</h4>
-                <p>第一年死亡给付 \(n\)，第二年死亡给付 \(n-1\)，依此类推。</p>
-                <p>年末给付：</p>
-                <p>
-                    \[
-                    (DA)^1_{x:\overline{n}|}=\sum_{k=0}^{n-1}(n-k)v^{k+1}{}_{k|}q_x.
-                    \]
-                </p>
-            </section>
-            <section class="card">
-                <div class="section-heading">
-                    <p class="section-label">章节内容</p>
-                    <h2>第 3 章 生存年金</h2>
-                </div>
-                <h3>3.1 生存年金的定义</h3>
-                <p>生存年金是在被保险人生存时按期给付的一系列款项。其精算现值是各期给付现值乘以对应生存概率后求和或积分。</p>
-                <p>年金类型主要有：</p>
-                <ul class="feature-list">
-                    <li>连续年金：连续支付；</li>
-                    <li>期初付年金：每期初支付；</li>
-                    <li>期末付年金：每期末支付；</li>
-                    <li>定期年金：只支付有限期限；</li>
-                    <li>终身年金：只要生存就一直支付；</li>
-                    <li>延期年金：延期若干年后才开始支付。</li>
-                </ul>
-                <h3>3.2 终身生存年金</h3>
-                <h4>3.2.1 连续终身年金</h4>
-                <p>连续支付，每年支付率为 1：</p>
-                <p>
-                    \[
-                    \bar a_x=\int_0^\infty v^t{}_tp_x\,dt.
-                    \]
-                </p>
-                <h4>3.2.2 终身初付年金</h4>
-                <p>每年年初支付 1，只要年初仍生存就支付：</p>
-                <p>
-                    \[
-                    \ddot a_x=\sum_{k=0}^\infty v^k{}_kp_x.
-                    \]
-                </p>
-                <h4>3.2.3 终身期末付年金</h4>
-                <p>每年年末支付 1，只要年末仍生存就支付：</p>
-                <p>
-                    \[
-                    a_x=\sum_{k=1}^\infty v^k{}_kp_x.
-                    \]
-                </p>
-                <p>期初付和期末付关系：</p>
-                <p>
-                    \[
-                    \ddot a_x=1+a_x.
-                    \]
-                </p>
-                <h3>3.3 定期生存年金</h3>
-                <h4>3.3.1 连续 \(n\) 年期年金</h4>
-                <p>
-                    \[
-                    \bar a_{x:\overline{n}|}=\int_0^n v^t{}_tp_x\,dt.
-                    \]
-                </p>
-                <h4>3.3.2 \(n\) 年期初付年金</h4>
-                <p>
-                    \[
-                    \ddot a_{x:\overline{n}|}=\sum_{k=0}^{n-1}v^k{}_kp_x.
-                    \]
-                </p>
-                <h4>3.3.3 \(n\) 年期末付年金</h4>
-                <p>
-                    \[
-                    a_{x:\overline{n}|}=\sum_{k=1}^{n}v^k{}_kp_x.
-                    \]
-                </p>
-                <h3>3.4 年金与寿险的关系</h3>
-                <p>这些关系非常重要，常用于化简计算。</p>
-                <h4>3.4.1 连续模型</h4>
-                <p>对终身情形：</p>
-                <p>
-                    \[
-                    \delta\bar a_x+\bar A_x=1.
-                    \]
-                </p>
-                <p>对 \(n\) 年生死合险：</p>
-                <p>
-                    \[
-                    \delta\bar a_{x:\overline{n}|}+\bar A_{x:\overline{n}|}=1.
-                    \]
-                </p>
-                <h4>3.4.2 离散初付模型</h4>
-                <p>对终身情形：</p>
-                <p>
-                    \[
-                    d\ddot a_x+A_x=1.
-                    \]
-                </p>
-                <p>对 \(n\) 年生死合险：</p>
-                <p>
-                    \[
-                    d\ddot a_{x:\overline{n}|}+A_{x:\overline{n}|}=1.
-                    \]
-                </p>
-                <h4>3.4.3 离散期末付模型</h4>
-                <p>对终身情形：</p>
-                <p>
-                    \[
-                    ia_x+A_x=1.
-                    \]
-                </p>
-                <p>因为</p>
-                <p>
-                    \[
-                    \ddot a_x=1+a_x,
-                    \qquad d=\frac{i}{1+i}.
-                    \]
-                </p>
-                <p>注意常见等式</p>
-                <p>
-                    \[
-                    (1+i)(1-d)=1
-                    \]
-                </p>
-                <p>成立，因为 \(1-d=v\)。</p>
-                <h3>3.5 延期年金</h3>
-                <p>\(m\) 年延期终身初付年金：</p>
-                <p>
-                    \[
-                    {}_{m|}\ddot a_x={}_mE_x\ddot a_{x+m}.
-                    \]
+                <p>对 \(k=0,1,2,\ldots\)，有</p>
+                <p class="math-block">
+\[
+\mathbb{P}(K(x)=k)=\mathbb{P}(k\le T(x)&lt;k+1)
+={}_kp_x-{}_{k+1}p_x={}_{k|}q_x.
+\]
                 </p>
                 <p>也可以写为</p>
-                <p>
-                    \[
-                    {}_{m|}\ddot a_x=\ddot a_x-\ddot a_{x:\overline{m}|}.
-                    \]
+                <p class="math-block">
+\[
+\mathbb{P}(K(x)=k)={}_kp_x q_{x+k}.
+\]
                 </p>
-                <p>连续情形：</p>
-                <p>
-                    \[
-                    {}_{m|}\bar a_x={}_mE_x\bar a_{x+m}.
-                    \]
+                <h3>1.4 死亡力</h3>
+                <p>死亡力，也称死力、瞬时死亡率，定义为</p>
+                <p class="math-block">
+\[
+\mu_x=\lim_{\Delta x\to 0^+}
+\frac{\mathbb{P}(x&lt;X\le x+\Delta x\mid X&gt;x)}{\Delta x}
+=\frac{f_X(x)}{s(x)}.
+\]
                 </p>
-                <h3>3.6 每年支付 \(m\) 次的年金</h3>
-                <p>每年支付 \(m\) 次时，要先明确每次给付金额。若每年总给付额为 1，则每次给付额通常为 \(1/m\)。</p>
-                <p>记每年 \(m\) 次期初付年金为 \(\ddot a_x^{(m)}\)，期末付年金为 \(a_x^{(m)}\)。当 \(m\to\infty\) 时，离散高频支付趋近于连续支付。</p>
-                <h3>3.7 精算终值</h3>
-                <p>若一个 \(n\) 年期初付生存年金的精算现值为 \(\ddot a_{x:\overline{n}|}\)，则其以生存至 \(n\) 年末为条件的精算终值为</p>
-                <p>
-                    \[
-                    \ddot s_{x:\overline{n}|}=\frac{\ddot a_{x:\overline{n}|}}{{}_nE_x}.
-                    \]
+                <blockquote>
+                    <p>注：\(\mu_xdx\) 可理解为在很短年龄区间 \([x,x+dx]\) 内死亡的人数占 \(x\) 岁生存人数的比例。</p>
+                </blockquote>
+                <p>对 \((x)\) 的剩余寿命，有</p>
+                <p class="math-block">
+\[
+f_{T(x)}(t)={}_tp_x\mu_{x+t}.
+\]
                 </p>
-                <p>精算终值的含义：把年金的精算现值积累到第 \(n\) 年末，并且条件化到被保险人生存至第 \(n\) 年末这一状态。</p>
-            </section>
-            <section class="card">
-                <div class="section-heading">
-                    <p class="section-label">章节内容</p>
-                    <h2>第 4 章 净保费</h2>
-                </div>
-                <h3>4.1 损失变量</h3>
-                <p>保险人签单时的损失现值定义为</p>
-                <p>
-                    \[
-                    L_0=\text{未来给付现值}+\text{未来费用现值}-\text{未来保费现值}.
-                    \]
-                </p>
-                <p>若只讨论净保费，通常不考虑费用，则</p>
-                <p>
-                    \[
-                    L_0=\text{未来给付现值}-\text{未来净保费现值}.
-                    \]
-                </p>
-                <h3>4.2 等价原则</h3>
-                <p>净保费按等价原则确定：</p>
-                <p>
-                    \[
-                    E(L_0)=0.
-                    \]
-                </p>
-                <p>也就是</p>
-                <p>
-                    \[
-                    \text{未来净保费精算现值}=\text{未来给付精算现值}.
-                    \]
-                </p>
-                <h3>4.3 趸缴净保费</h3>
-                <p>趸缴净保费是签单时一次性缴纳的净保费。由于没有后续保费，趸缴净保费直接等于给付现值的期望。</p>
-                <p>常见例子：</p>
-                <p>
-                    \[
-                    \text{纯生存保险趸缴净保费}={}_nE_x.
-                    \]
-                </p>
-                <p>
-                    \[
-                    \text{终身寿险趸缴净保费}=A_x\text{ 或 }\bar A_x.
-                    \]
-                </p>
-                <p>
-                    \[
-                    \text{生死合险趸缴净保费}=A_{x:\overline{n}|}\text{ 或 }\bar A_{x:\overline{n}|}.
-                    \]
-                </p>
-                <h3>4.4 均衡净保费</h3>
-                <p>若保费按期缴纳，且被保险人生存时才缴费，则均衡净保费为</p>
-                <p>
-                    \[
-                    P=\frac{\text{未来给付精算现值}}{\text{未来缴费年金精算现值}}.
-                    \]
-                </p>
-                <h4>4.4.1 完全离散终身寿险</h4>
-                <p>每年年初缴费，死亡年末给付：</p>
-                <p>
-                    \[
-                    P_x=\frac{A_x}{\ddot a_x}.
-                    \]
-                </p>
-                <h4>4.4.2 完全离散 \(n\) 年期生死合险</h4>
-                <p>
-                    \[
-                    P_{x:\overline{n}|}=\frac{A_{x:\overline{n}|}}{\ddot a_{x:\overline{n}|}}.
-                    \]
-                </p>
-                <h4>4.4.3 \(h\) 年限期缴费</h4>
-                <p>若给付为终身寿险，但只缴费 \(h\) 年，则</p>
-                <p>
-                    \[
-                    {}^hP_x=\frac{A_x}{\ddot a_{x:\overline{h}|}}.
-                    \]
-                </p>
-                <h3>4.5 变额保费或变额给付</h3>
-                <p>如果给付额或保费额随时间变化，应逐项写出现金流并求精算现值。</p>
-                <p>例如第 \(k\) 年年初缴保费 \(\pi_k\)，则保费现值为</p>
-                <p>
-                    \[
-                    Y=\sum_{k\ge0}\pi_kv^kI_{\{T(x)\ge k\}}.
-                    \]
-                </p>
-                <p>其期望为</p>
-                <p>
-                    \[
-                    E(Y)=\sum_{k\ge0}\pi_kv^k{}_kp_x.
-                    \]
-                </p>
-                <h3>4.6 保费方差</h3>
-                <p>若</p>
-                <p>
-                    \[
-                    L_0=Z-PY,
-                    \]
-                </p>
-                <p>其中 \(Z\) 为给付现值，\(Y\) 为每单位保费对应的缴费年金现值，则</p>
-                <p>
-                    \[
-                    \operatorname{Var}(L_0)=\operatorname{Var}(Z-PY).
-                    \]
-                </p>
-                <p>展开得</p>
-                <p>
-                    \[
-                    \operatorname{Var}(L_0)=\operatorname{Var}(Z)+P^2\operatorname{Var}(Y)-2P\operatorname{Cov}(Z,Y).
-                    \]
-                </p>
-                <p>如果是趸缴净保费，保费本身不是随机变量，故损失方差只来自给付现值随机变量。</p>
-                <h3>4.7 总保费</h3>
-                <p>总保费在净保费基础上加入费用、风险边际和利润加载。</p>
-                <p>一般可写为</p>
-                <p>
-                    \[
-                    \text{总保费现值}=\text{给付现值}+\text{费用现值}+\text{风险附加}+\text{利润附加}.
-                    \]
-                </p>
-                <p>费用通常包括：</p>
-                <ul class="feature-list">
-                    <li>首年佣金；</li>
-                    <li>续年佣金；</li>
-                    <li>保单签发费用；</li>
-                    <li>维持费用；</li>
-                    <li>理赔费用；</li>
-                    <li>税费和利润加载。</li>
-                </ul>
-                <h3>4.8 聚合风险与正态近似</h3>
-                <p>设单张保单损失为 \(L\)，满足</p>
-                <p>
-                    \[
-                    E(L)=\mu,\qquad \operatorname{Var}(L)=\sigma^2.
-                    \]
-                </p>
-                <p>若组合中有 \(n\) 张独立同分布保单，聚合损失为</p>
-                <p>
-                    \[
-                    L_{\rm agg}=\sum_{j=1}^nL_j.
-                    \]
-                </p>
-                <p>则</p>
-                <p>
-                    \[
-                    E(L_{\rm agg})=n\mu,
-                    \]
-                </p>
-                <p>
-                    \[
-                    \operatorname{Var}(L_{\rm agg})=n\sigma^2.
-                    \]
-                </p>
-                <p>当 \(n\) 较大时，可用正态近似：</p>
-                <p>
-                    \[
-                    L_{\rm agg}\approx N(n\mu,n\sigma^2).
-                    \]
-                </p>
-                <p>若要求破产概率不超过 \(\alpha\)，常用分位数条件确定安全附加。</p>
-            </section>
-            <section class="card">
-                <div class="section-heading">
-                    <p class="section-label">章节内容</p>
-                    <h2>第 5 章 责任准备金</h2>
-                </div>
-                <h3>5.1 责任准备金的含义</h3>
-                <p>责任准备金是保单已经生效一段时间后，保险公司为了履行未来保险责任需要持有的资金。</p>
-                <p>在 \(t\) 时刻，未来损失随机变量为</p>
-                <p>
-                    \[
-                    L_t=\text{未来给付现值}-\text{未来保费现值}.
-                    \]
-                </p>
-                <p>净责任准备金定义为</p>
-                <p>
-                    \[
-                    {}_tV=E(L_t\mid T(x)&gt;t).
-                    \]
-                </p>
-                <h3>5.2 未来法</h3>
-                <p>未来法准备金等于未来给付精算现值减未来保费精算现值：</p>
-                <p>
-                    \[
-                    {}_tV=E_t(\text{未来给付现值})-E_t(\text{未来净保费现值}).
-                    \]
-                </p>
-                <h4>5.2.1 完全离散终身寿险</h4>
-                <p>
-                    \[
-                    {}_tV=A_{x+t}-P_x\ddot a_{x+t}.
-                    \]
-                </p>
-                <h4>5.2.2 \(n\) 年期生死合险</h4>
-                <p>
-                    \[
-                    {}_tV=A_{x+t:\overline{n-t}|}-P\ddot a_{x+t:\overline{n-t}|},\qquad 0\le t\le n.
-                    \]
-                </p>
-                <p>期满时准备金通常满足</p>
-                <p>
-                    \[
-                    {}_nV=1
-                    \]
-                </p>
-                <p>表示若被保险人生存至期满，需要支付满期给付。</p>
-                <h3>5.3 过去法</h3>
-                <p>过去法从已收保费和已发生给付的积累值角度计算准备金。基本思想是：</p>
-                <p>
-                    \[
-                    {}_tV=\frac{\text{过去净保费积累值}-\text{过去给付积累值}}{\text{生存到 }t\text{ 的条件}}.
-                    \]
-                </p>
-                <p>在净保费原则和同一组精算假设下，未来法与过去法等价。</p>
-                <h3>5.4 完全离散一年递推式</h3>
-                <p>对单位死亡保险金、年初缴费、死亡年末给付的完全离散寿险，有</p>
-                <p>
-                    \[
-                    {}_tV+P=v\left(q_{x+t}+p_{x+t}{}_{t+1}V\right).
-                    \]
-                </p>
-                <p>等价地，</p>
-                <p>
-                    \[
-                    ({}_tV+P)(1+i)=q_{x+t}+p_{x+t}{}_{t+1}V.
-                    \]
-                </p>
-                <p>整理得</p>
-                <p>
-                    \[
-                    {}_{t+1}V=\frac{({}_tV+P)(1+i)-q_{x+t}}{p_{x+t}}.
-                    \]
-                </p>
-                <p>若第 \(t+1\) 年死亡给付额为 \(b_{t+1}\)，则</p>
-                <p>
-                    \[
-                    {}_tV+P=v\left(q_{x+t}b_{t+1}+p_{x+t}{}_{t+1}V\right).
-                    \]
-                </p>
-                <h3>5.5 责任准备金的直观解释</h3>
-                <p>在 \(t\) 年末，保险公司手上已有准备金 \({}_tV\)，并收取下一期保费 \(P\)。这一笔资金积累一年后，要么用于死亡给付，要么成为下一年仍有效保单的准备金。</p>
-                <p>所以递推式可以理解为</p>
-                <p>
-                    \[
-                    \text{本年初资金}=\text{未来一年死亡给付的现值}+\text{生存者下一年准备金的现值}.
-                    \]
-                </p>
-                <h3>5.6 亏损随机变量的方差</h3>
-                <p>\(t\) 时刻未来损失为</p>
-                <p>
-                    \[
-                    L_t=\text{未来给付现值}-\text{未来保费现值}.
-                    \]
-                </p>
-                <p>责任准备金为其条件期望：</p>
-                <p>
-                    \[
-                    {}_tV=E(L_t\mid T(x)&gt;t).
-                    \]
-                </p>
-                <p>方差为</p>
-                <p>
-                    \[
-                    \operatorname{Var}(L_t)=E(L_t^2)-[E(L_t)]^2.
-                    \]
-                </p>
-                <p>计算时通常先按死亡年份或生存状态分解 \(L_t\) 的取值，再求一阶矩和二阶矩。</p>
-                <h3>5.7 Thiele 微分方程</h3>
-                <p>连续模型下，设保费率为 \(\pi_t\)，死亡给付额为 \(b_t\)，利息力为 \(\delta_t\)，则责任准备金满足</p>
-                <p>
-                    \[
-                    \frac{d}{dt}{}_tV=\delta_t{}_tV+\pi_t-\mu_{x+t}(b_t-{}_tV).
-                    \]
-                </p>
-                <p>各项含义：</p>
-                <ul class="feature-list">
-                    <li>\(\delta_t{}_tV\)：准备金产生的利息；</li>
-                    <li>\(\pi_t\)：连续缴入的保费；</li>
-                    <li>\(\mu_{x+t}(b_t-{}_tV)\)：死亡发生时保险公司相对准备金还需额外支付的净额。</li>
-                </ul>
-                <h3>5.8 修正责任准备金</h3>
-                <p>均衡净保费法将净保费均匀分摊到整个缴费期，但实际新契约首年费用通常较高，例如佣金、核保和签单费用。因此，直接用均衡净保费计算首年准备金可能不符合实际经营压力。</p>
-                <p>修正净保费法的思想是：</p>
-                <ul class="feature-list">
-                    <li>首年修正净保费较低；</li>
-                    <li>续年修正净保费较高；</li>
-                    <li>未来给付精算现值仍与修正后保费精算现值相等。</li>
-                </ul>
-                <p>常见形式为</p>
-                <p>
-                    \[
-                    \alpha+\beta\ddot a_{x+1}=A_x,
-                    \]
-                </p>
-                <p>其中 \(\alpha\) 是首年修正净保费，\(\beta\) 是续年修正净保费。</p>
-                <p>修正准备金并不是降低客户实际首年缴纳的总保费，而是在准备金评估中把首年高费用因素反映出来，从而降低首年准备金压力。</p>
-            </section>
-            <section class="card">
-                <div class="section-heading">
-                    <p class="section-label">章节内容</p>
-                    <h2>第 6 章 多生命模型</h2>
-                </div>
-                <h3>6.1 联合分布</h3>
-                <p>设两个个体未来寿命分别为 \(T(x)\) 和 \(T(y)\)。联合分布函数为</p>
-                <p>
-                    \[
-                    F_{T(x),T(y)}(s,t)=P(T(x)\le s,T(y)\le t).
-                    \]
-                </p>
-                <p>联合生存函数为</p>
-                <p>
-                    \[
-                    S_{T(x),T(y)}(s,t)=P(T(x)&gt;s,T(y)&gt;t).
-                    \]
-                </p>
-                <p>若联合密度存在，则</p>
-                <p>
-                    \[
-                    f_{T(x),T(y)}(s,t)=\frac{\partial^2}{\partial s\partial t}F_{T(x),T(y)}(s,t).
-                    \]
-                </p>
-                <p>也有</p>
-                <p>
-                    \[
-                    f_{T(x),T(y)}(s,t)=\frac{\partial^2}{\partial s\partial t}S_{T(x),T(y)}(s,t).
-                    \]
-                </p>
-                <h3>6.2 联合生命状态</h3>
-                <p>联合生命状态 \(xy\) 的未来寿命定义为</p>
-                <p>
-                    \[
-                    T(xy)=\min\{T(x),T(y)\}.
-                    \]
-                </p>
-                <p>含义：两人都活着时，联合生命状态存在；任一人死亡，状态终止。</p>
-                <p>生存概率：</p>
-                <p>
-                    \[
-                    {}_tp_{xy}=P(T(x)&gt;t,T(y)&gt;t).
-                    \]
-                </p>
-                <p>若 \(T(x)\) 与 \(T(y)\) 独立，则</p>
-                <p>
-                    \[
-                    {}_tp_{xy}={}_tp_x{}_tp_y.
-                    \]
-                </p>
-                <p>联合生命状态在 \(t\) 时刻的死亡力，在独立假设下为</p>
-                <p>
-                    \[
-                    \mu_{xy}(t)=\mu_{x+t}+\mu_{y+t}.
-                    \]
-                </p>
-                <h3>6.3 最后生存者状态</h3>
-                <p>最后生存者状态 \(\overline{xy}\) 的未来寿命定义为</p>
-                <p>
-                    \[
-                    T(\overline{xy})=\max\{T(x),T(y)\}.
-                    \]
-                </p>
-                <p>含义：至少一人活着时，最后生存者状态存在；两人都死亡后，状态终止。</p>
-                <p>生存概率：</p>
-                <p>
-                    \[
-                    {}_tp_{\overline{xy}}=P(T(x)&gt;t\text{ 或 }T(y)&gt;t).
-                    \]
+                <p>该式可理解为：“先活到 \(x+t\) 岁”乘以“在 \(x+t\) 附近瞬时死亡”。同时</p>
+                <p class="math-block">
+\[
+\frac{d}{dt}({}_tp_x)=-{}_tp_x\mu_{x+t}.
+\]
                 </p>
                 <p>因此</p>
-                <p>
-                    \[
-                    {}_tp_{\overline{xy}}={}_tp_x+{}_tp_y-{}_tp_{xy}.
-                    \]
+                <p class="math-block">
+\[
+{}_tp_x=\exp\left(-\int_0^t\mu_{x+s}\,ds\right).
+\]
                 </p>
-                <p>若独立，则</p>
-                <p>
-                    \[
-                    {}_tp_{\overline{xy}}={}_tp_x+{}_tp_y-{}_tp_x{}_tp_y.
-                    \]
+                <p>若 \(0&lt;h&lt;t\)，则</p>
+                <p class="math-block">
+\[
+{}_tp_x={}_hp_x\,{}_{t-h}p_{x+h}.
+\]
                 </p>
-                <h3>6.4 联合生命与最后生存者的期望余命</h3>
-                <p>联合生命状态的完全期望余命：</p>
-                <p>
-                    \[
-                    \mathring e_{xy}=\int_0^\infty {}_tp_{xy}\,dt.
-                    \]
+                <h3>1.5 剩余寿命期望</h3>
+                <p>完整剩余寿命的期望记为</p>
+                <p class="math-block">
+\[
+\overset{\circ}{e}_x=\mathbb{E}(T(x)).
+\]
                 </p>
-                <p>最后生存者状态的完全期望余命：</p>
-                <p>
-                    \[
-                    \mathring e_{\overline{xy}}=\int_0^\infty {}_tp_{\overline{xy}}\,dt.
-                    \]
+                <p>整值剩余寿命的期望记为</p>
+                <p class="math-block">
+\[
+e_x=\mathbb{E}(K(x)).
+\]
                 </p>
-                <p>由</p>
-                <p>
-                    \[
-                    {}_tp_{\overline{xy}}={}_tp_x+{}_tp_y-{}_tp_{xy}
-                    \]
+                <p>常用计算公式为</p>
+                <p class="math-block">
+\[
+\overset{\circ}{e}_x=\int_0^{\infty}{}_tp_x\,dt,
+\]
                 </p>
-                <p>可得</p>
-                <p>
-                    \[
-                    \mathring e_{\overline{xy}}=\mathring e_x+\mathring e_y-\mathring e_{xy}.
-                    \]
+                <p class="math-block">
+\[
+e_x=\sum_{n=1}^{\infty}{}_np_x.
+\]
                 </p>
-                <h3>6.5 多生命年金</h3>
-                <h4>6.5.1 联合生命年金</h4>
-                <p>只要两人都生存就给付的连续年金：</p>
-                <p>
-                    \[
-                    \bar a_{xy}=\int_0^\infty v^t{}_tp_{xy}\,dt.
-                    \]
+                <p>递推关系为</p>
+                <p class="math-block">
+\[
+e_x=p_x(1+e_{x+1}).
+\]
                 </p>
-                <h4>6.5.2 最后生存者年金</h4>
-                <p>只要至少一人生存就给付的连续年金：</p>
-                <p>
-                    \[
-                    \bar a_{\overline{xy}}=\int_0^\infty v^t{}_tp_{\overline{xy}}\,dt.
-                    \]
+                <h3>1.6 寿命分布参数模型</h3>
+                                <div class="table-scroll">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>模型</th>
+                                <th>死亡力或生存函数特征</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>de Moivre</td>
+                                <td>生存函数线性，常见形式为 \(s(x)=1-\frac{x}{\omega}\)</td>
+                            </tr>
+                            <tr>
+                                <td>Gompertz</td>
+                                <td>死亡力为指数形式，\(\mu(x)=BC^x\)</td>
+                            </tr>
+                            <tr>
+                                <td>Makeham</td>
+                                <td>在 Gompertz 死亡力基础上加常数项，\(\mu(x)=A+BC^x\)</td>
+                            </tr>
+                            <tr>
+                                <td>Weibull</td>
+                                <td>死亡力为幂函数形式</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <blockquote>
+                    <p>注：参数模型主要用于用简单解析式拟合寿命分布；传统寿险精算中，更常用生命表描述寿命分布。</p>
+                </blockquote>
+                <h3>1.7 随机生存群与生命表</h3>
+                <p>设初始有 \(\ell_0\) 个个体，寿命服从共同生存分布。记实际活到 \(x\) 岁的人数为 \(\mathscr{L}(x)\)，其期望为</p>
+                <p class="math-block">
+\[
+\ell_x=\mathbb{E}(\mathscr{L}(x)).
+\]
                 </p>
-                <p>由生存概率关系可得</p>
-                <p>
-                    \[
-                    \bar a_{\overline{xy}}=\bar a_x+\bar a_y-\bar a_{xy}.
-                    \]
+                <p>记 \([x,x+t)\) 内死亡人数为 \({}_t\mathscr{D}_x\)，其期望为</p>
+                <p class="math-block">
+\[
+{}_td_x=\mathbb{E}({}_t\mathscr{D}_x).
+\]
                 </p>
-                <p>等价地，</p>
-                <p>
-                    \[
-                    \bar a_{xy}+\bar a_{\overline{xy}}=\bar a_x+\bar a_y.
-                    \]
+                <p>则</p>
+                <p class="math-block">
+\[
+{}_td_x=\ell_x-\ell_{x+t}.
+\]
                 </p>
-                <h4>6.5.3 继承年金</h4>
-                <p>若 \(x\) 死亡后，只要 \(y\) 仍生存就给付，则连续继承年金精算现值为</p>
-                <p>
-                    \[
-                    \bar a_{y|x}=\bar a_y-\bar a_{xy}.
-                    \]
+                <blockquote>
+                    <p>易错点：死亡人数应为期初生存人数减期末生存人数，即 \(\ell_x-\ell_{x+t}\)，不是 \(\ell_{x+t}-\ell_x\)。</p>
+                </blockquote>
+                <p>生命表中的常用关系为</p>
+                <p class="math-block">
+\[
+{}_tp_x=\frac{\ell_{x+t}}{\ell_x},\qquad
+{}_tq_x=\frac{{}_td_x}{\ell_x}.
+\]
                 </p>
-                <p>含义：\(\bar a_y\) 是只要 \(y\) 活着就给付；其中两人都活着时的给付 \(\bar a_{xy}\) 需要扣除，剩下的就是 \(x\) 已死亡且 \(y\) 仍生存时的给付。</p>
-                <h3>6.6 多生命保险</h3>
-                <h4>6.6.1 首次死亡保险</h4>
-                <p>首次死亡保险在联合生命状态终止时给付，即两人中第一人死亡时给付。</p>
-                <p>死亡即刻给付现值为</p>
-                <p>
-                    \[
-                    Z=v^{T(xy)}.
-                    \]
+                <p>死亡力与生命表函数满足</p>
+                <p class="math-block">
+\[
+\frac{d\ell_x}{dx}=-\ell_x\mu_x.
+\]
                 </p>
-                <p>精算现值为</p>
-                <p>
-                    \[
-                    \bar A_{xy}=E\left(v^{T(xy)}\right).
-                    \]
+                <p>生命表的历史脉络可简记为：约翰&#183;格朗特于 1662 年提出生命表思想，哈雷于 1693 年构造第一张完整生命表。</p>
+                <h3>1.8 分数年龄上的分布假设</h3>
+                <p>生命表通常只给出整数年龄处的信息。对于 \(x+t\) 这样的分数年龄，需要额外假设。</p>
+                <h4>UDD 假设</h4>
+                <p>UDD，即死亡均匀分布假设，也可理解为生存函数在整数年龄之间线性插值：</p>
+                <p class="math-block">
+\[
+s(x+t)=(1-t)s(x)+t s(x+1),\qquad 0&lt;t&lt;1.
+\]
                 </p>
-                <h4>6.6.2 最后死亡保险</h4>
-                <p>最后死亡保险在最后生存者死亡时给付。</p>
-                <p>死亡即刻给付现值为</p>
-                <p>
-                    \[
-                    Z=v^{T(\overline{xy})}.
-                    \]
+                <p>此时</p>
+                <p class="math-block">
+\[
+\ell_{x+t}=(1-t)\ell_x+t\ell_{x+1},
+\]
                 </p>
-                <p>精算现值为</p>
-                <p>
-                    \[
-                    \bar A_{\overline{xy}}=E\left(v^{T(\overline{xy})}\right).
-                    \]
+                <p class="math-block">
+\[
+{}_td_x=t d_x,
+\]
                 </p>
-                <h4>6.6.3 多生命保险恒等式</h4>
-                <p>连续模型下：</p>
-                <p>
-                    \[
-                    \delta\bar a_{xy}+\bar A_{xy}=1,
-                    \]
+                <p class="math-block">
+\[
+{}_tq_x=tq_x,
+\]
                 </p>
-                <p>
-                    \[
-                    \delta\bar a_{\overline{xy}}+\bar A_{\overline{xy}}=1.
-                    \]
+                <p class="math-block">
+\[
+{}_tp_x=1-tq_x,
+\]
+                </p>
+                <p class="math-block">
+\[
+f_{T(x)}(t)=q_x,
+\]
+                </p>
+                <p class="math-block">
+\[
+\mu_{x+t}=\frac{q_x}{1-tq_x}.
+\]
+                </p>
+                <p>若每一年龄年都满足 UDD，则 \(K(x)\) 与 \(S(x)\) 相互独立，且 \(S(x)\sim U(0,1)\)。因此</p>
+                <p class="math-block">
+\[
+\overset{\circ}{e}_x=e_x+\frac12.
+\]
+                </p>
+                <h4>常数死亡力假设</h4>
+                <p>常数死亡力假设是指在 \([x,x+1)\) 上 \(\ln s(x+t)\) 线性：</p>
+                <p class="math-block">
+\[
+\ln s(x+t)=(1-t)\ln s(x)+t\ln s(x+1).
+\]
+                </p>
+                <p>此时死亡力为常数：</p>
+                <p class="math-block">
+\[
+\mu_{x+t}=-\ln p_x.
+\]
                 </p>
                 <p>并且</p>
-                <p>
-                    \[
-                    \bar A_{xy}+\bar A_{\overline{xy}}=\bar A_x+\bar A_y.
-                    \]
+                <p class="math-block">
+\[
+{}_tp_x=p_x^t,
+\]
                 </p>
-                <h3>6.7 多生命模型常见判断</h3>
+                <p class="math-block">
+\[
+{}_tq_x=1-p_x^t,
+\]
+                </p>
+                <p class="math-block">
+\[
+f_{T(x)}(t)=-p_x^t\ln p_x.
+\]
+                </p>
+                <h4>Balducci 假设</h4>
+                <p>Balducci 假设是指 \(1/s(x+t)\) 在整数年龄之间线性：</p>
+                <p class="math-block">
+\[
+\frac1{s(x+t)}=\frac{1-t}{s(x)}+\frac{t}{s(x+1)}.
+\]
+                </p>
+                <p>此时</p>
+                <p class="math-block">
+\[
+{}_tp_x=\frac{p_x}{1-(1-t)q_x},
+\]
+                </p>
+                <p class="math-block">
+\[
+{}_tq_x=\frac{tq_x}{1-(1-t)q_x},
+\]
+                </p>
+                <p class="math-block">
+\[
+\mu_{x+t}=\frac{q_x}{1-(1-t)q_x}.
+\]
+                </p>
+                <blockquote>
+                    <p>对比记忆：UDD 下死亡力随 \(t\) 上升；常数死亡力假设下死亡力不变；Balducci 假设下死亡力随 \(t\) 下降。</p>
+                </blockquote>
+                <h3>1.9 选择生命表与终极生命表</h3>
+                <p>若投保前需要体检，新参保人群短期死亡率通常低于已参保人群。为了刻画这种“选择效应”，可使用选择-终极生命表：在选择期内采用选择死亡率；选择期结束后，死亡率回到终极生命表状态。</p>
+                <blockquote>
+                    <p>记忆：选择期内死亡率较低；选择期过后回到普通的终极表。</p>
+                </blockquote>
+            </section>
+            <section class="card">
+                <div class="section-heading">
+                    <p class="section-label">章节内容</p>
+                    <h2>2. 死亡保险</h2>
+                </div>
+                <h3>2.1 基本险种与符号</h3>
+                <p>死亡保险以被保险人在保险期限内死亡为给付条件。常见险种包括定期寿险、终身寿险、延期寿险、生存保险和生死合险。</p>
+                                <div class="table-scroll">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>险种</th>
+                                <th>年末给付符号</th>
+                                <th>死亡即刻给付符号或说明</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>\(n\) 年期定期寿险</td>
+                                <td>\(A^1_{x:\overline{n}|}\)</td>
+                                <td>\(\bar A^1_{x:\overline{n}|}\)</td>
+                            </tr>
+                            <tr>
+                                <td>终身寿险</td>
+                                <td>\(A_x\)</td>
+                                <td>\(\bar A_x\)</td>
+                            </tr>
+                            <tr>
+                                <td>延期 \(m\) 年 \(n\) 年期寿险</td>
+                                <td>\({}_{m|n}A_x\)</td>
+                                <td>\({}_{m|n}\bar A_x\)</td>
+                            </tr>
+                            <tr>
+                                <td>延期 \(m\) 年终身寿险</td>
+                                <td>\({}_{m|}A_x\)</td>
+                                <td>\({}_{m|}\bar A_x\)</td>
+                            </tr>
+                            <tr>
+                                <td>\(n\) 年期生存保险</td>
+                                <td>\({}_nE_x\)</td>
+                                <td>生存给付在 \(n\) 年末</td>
+                            </tr>
+                            <tr>
+                                <td>\(n\) 年期生死合险</td>
+                                <td>\(A_{x:\overline{n}|}\)</td>
+                                <td>\(\bar A_{x:\overline{n}|}\)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <blockquote>
+                    <p>注：\({}_nE_x=v^n{}_np_x\) 同时包含贴现因子和生存概率。它在寿险中也可看作 \(n\) 年期生存保险的精算现值。</p>
+                </blockquote>
+                <h3>2.2 定期寿险、终身寿险和生存保险</h3>
+                <p>死亡即刻给付的 \(n\) 年期定期寿险：</p>
+                <p class="math-block">
+\[
+\bar A^1_{x:\overline{n}|}=\int_0^n v^t{}_tp_x\mu_{x+t}\,dt.
+\]
+                </p>
+                <p>死亡保单年度末给付的 \(n\) 年期定期寿险：</p>
+                <p class="math-block">
+\[
+A^1_{x:\overline{n}|}=\sum_{k=0}^{n-1}v^{k+1}{}_{k|}q_x.
+\]
+                </p>
+                <p>终身寿险为定期寿险期限趋于无穷时的情形：</p>
+                <p class="math-block">
+\[
+\bar A_x=\int_0^{\infty}v^t{}_tp_x\mu_{x+t}\,dt,
+\]
+                </p>
+                <p class="math-block">
+\[
+A_x=\sum_{k=0}^{\infty}v^{k+1}{}_{k|}q_x.
+\]
+                </p>
+                <p>生存保险为</p>
+                <p class="math-block">
+\[
+{}_nE_x=v^n{}_np_x.
+\]
+                </p>
+                <h3>2.3 生死合险</h3>
+                <p>\(n\) 年期生死合险由 \(n\) 年期定期寿险和 \(n\) 年期生存保险组成。</p>
+                <p>死亡即刻给付时：</p>
+                <p class="math-block">
+\[
+\bar A_{x:\overline{n}|}=\bar A^1_{x:\overline{n}|}+{}_nE_x.
+\]
+                </p>
+                <p>死亡保单年度末给付时：</p>
+                <p class="math-block">
+\[
+A_{x:\overline{n}|}=A^1_{x:\overline{n}|}+{}_nE_x.
+\]
+                </p>
+                <blockquote>
+                    <p>易错点：定期寿险 \(A^1_{x:\overline{n}|}\) 不包含生存给付；生死合险 \(A_{x:\overline{n}|}\) 包含期满生存给付。</p>
+                </blockquote>
+                <h3>2.4 分解与递推公式</h3>
+                <p>对 \(0&lt;m&lt;n\)，死亡即刻给付的定期寿险有</p>
+                <p class="math-block">
+\[
+\bar A^1_{x:\overline{n}|}=\bar A^1_{x:\overline{m}|}+{}_mE_x\bar A^1_{x+m:\overline{n-m}|}.
+\]
+                </p>
+                <p>死亡保单年度末给付的定期寿险有</p>
+                <p class="math-block">
+\[
+A^1_{x:\overline{n}|}=A^1_{x:\overline{m}|}+{}_mE_xA^1_{x+m:\overline{n-m}|}.
+\]
+                </p>
+                <p>生死合险有</p>
+                <p class="math-block">
+\[
+A_{x:\overline{n}|}=A^1_{x:\overline{m}|}+{}_mE_xA_{x+m:\overline{n-m}|}.
+\]
+                </p>
+                <p>终身寿险可分解为前 \(n\) 年定期寿险和 \(n\) 年后延期终身寿险：</p>
+                <p class="math-block">
+\[
+A_x=A^1_{x:\overline{n}|}+{}_nE_xA_{x+n}.
+\]
+                </p>
+                <p>延期 \(m\) 年、期限 \(n\) 年的寿险可写为</p>
+                <p class="math-block">
+\[
+{}_{m|n}A_x=A^1_{x:\overline{m+n}|}-A^1_{x:\overline{m}|}.
+\]
+                </p>
+                <h3>2.5 UDD 假设下不同给付时刻的关系</h3>
+                <p>在每一年龄年 UDD 假设成立时，死亡即刻给付和死亡年末给付之间有</p>
+                <p class="math-block">
+\[
+\bar A_x=\frac{i}{\delta}A_x,
+\]
+                </p>
+                <p>等价地</p>
+                <p class="math-block">
+\[
+\delta\bar A_x=iA_x.
+\]
+                </p>
+                <p>类似地，定期寿险也有</p>
+                <p class="math-block">
+\[
+\bar A^1_{x:\overline{n}|}=\frac{i}{\delta}A^1_{x:\overline{n}|}.
+\]
+                </p>
+                <blockquote>
+                    <p>易错点：\(\frac{i}{\delta}\) 转换适用于“死亡给付”部分。生死合险包含期满生存给付，所以不能把整个 \(A_{x:\overline{n}|}\) 直接乘 \(\frac{i}{\delta}\)。</p>
+                </blockquote>
+                <p>生死合险在 UDD 假设下应写为</p>
+                <p class="math-block">
+\[
+\bar A_{x:\overline{n}|}=\frac{i}{\delta}A^1_{x:\overline{n}|}+{}_nE_x.
+\]
+                </p>
+                <h3>2.6 矩与方差</h3>
+                <p>若保险给付现值为 \(Z\)，且给付额为 1，\(Z\) 的 \(j\) 阶矩通常可以通过把利息力 \(\delta\) 替换为 \(j\delta\) 来计算：</p>
+                <p class="math-block">
+\[
+\mathbb{E}(Z^j)@\delta=\mathbb{E}(Z)@j\delta.
+\]
+                </p>
+                <p>例如，死亡即刻给付的定期寿险有</p>
+                <p class="math-block">
+\[
+\mathbb{E}(Z^j)={}^{j}\bar A^1_{x:\overline{n}|},
+\]
+                </p>
+                <p>其中左上标 \(j\) 表示计算时采用利息力 \(j\delta\)，不是保额的 \(j\) 次方。</p>
+                <p>因此</p>
+                <p class="math-block">
+\[
+\operatorname{Var}(Z)=\mathbb{E}(Z^2)-[\mathbb{E}(Z)]^2.
+\]
+                </p>
+                <p>对生死合险，若 \(Z=Z_D+Z_S\)，其中 \(Z_D\) 为死亡给付现值，\(Z_S\) 为生存给付现值，由于二者不能同时发生，\(Z_DZ_S=0\)，故</p>
+                <p class="math-block">
+\[
+\operatorname{Var}(Z)=\operatorname{Var}(Z_D)+\operatorname{Var}(Z_S)-2\mathbb{E}(Z_D)\mathbb{E}(Z_S).
+\]
+                </p>
+                <p>这说明两全保险的方差小于对应死亡保险方差与生存保险方差之和。</p>
+                <h3>2.7 一年划分为 \(m\) 个区间给付</h3>
+                <p>设一年分为 \(m\) 个等间隔区间，死亡在所在区间末给付。在 UDD 假设下，终身寿险有</p>
+                <p class="math-block">
+\[
+A_x^{(m)}=\frac{i}{i^{(m)}}A_x.
+\]
+                </p>
+                <p>当 \(m\to\infty\) 时，区间末给付趋近于死亡即刻给付：</p>
+                <p class="math-block">
+\[
+A_x^{(m)}\to \bar A_x.
+\]
+                </p>
+            </section>
+            <section class="card">
+                <div class="section-heading">
+                    <p class="section-label">章节内容</p>
+                    <h2>3. 生存年金</h2>
+                </div>
+                <h3>3.1 生存年金分类与符号</h3>
+                <p>生存年金是以年金领取人生存为给付条件的一系列给付。</p>
+                                <div class="table-scroll">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>类别</th>
+                                <th>连续给付</th>
+                                <th>期初给付</th>
+                                <th>期末给付</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>终身生存年金</td>
+                                <td>\(\bar a_x\)</td>
+                                <td>\(\ddot a_x\)</td>
+                                <td>\(a_x\)</td>
+                            </tr>
+                            <tr>
+                                <td>\(n\) 年定期生存年金</td>
+                                <td>\(\bar a_{x:\overline{n}|}\)</td>
+                                <td>\(\ddot a_{x:\overline{n}|}\)</td>
+                                <td>\(a_{x:\overline{n}|}\)</td>
+                            </tr>
+                            <tr>
+                                <td>延期 \(m\) 年终身生存年金</td>
+                                <td>\({}_{m|}\bar a_x\)</td>
+                                <td>\({}_{m|}\ddot a_x\)</td>
+                                <td>\({}_{m|}a_x\)</td>
+                            </tr>
+                            <tr>
+                                <td>延期 \(m\) 年、给付 \(n\) 年生存年金</td>
+                                <td>\({}_{m|}\bar a_{x:\overline{n}|}\)</td>
+                                <td>\({}_{m|}\ddot a_{x:\overline{n}|}\)</td>
+                                <td>\({}_{m|}a_{x:\overline{n}|}\)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <h3>3.2 基本精算现值</h3>
+                <p>连续终身生存年金：</p>
+                <p class="math-block">
+\[
+\bar a_x=\int_0^{\infty}v^t{}_tp_x\,dt.
+\]
+                </p>
+                <p>期初终身生存年金：</p>
+                <p class="math-block">
+\[
+\ddot a_x=\sum_{k=0}^{\infty}v^k{}_kp_x.
+\]
+                </p>
+                <p>期末终身生存年金：</p>
+                <p class="math-block">
+\[
+a_x=\sum_{k=1}^{\infty}v^k{}_kp_x.
+\]
+                </p>
+                <p>定期年金只需把求和或积分的范围限制在给付期限内。</p>
+                <h3>3.3 年金与寿险的关系</h3>
+                <p>连续终身生存年金与死亡即刻给付终身寿险满足</p>
+                <p class="math-block">
+\[
+\delta\bar a_x+\bar A_x=1.
+\]
+                </p>
+                <p>期初终身生存年金与死亡年末给付终身寿险满足</p>
+                <p class="math-block">
+\[
+d\ddot a_x+A_x=1.
+\]
+                </p>
+                <p>\(n\) 年定期期初生存年金与 \(n\) 年期生死合险满足</p>
+                <p class="math-block">
+\[
+d\ddot a_{x:\overline{n}|}+A_{x:\overline{n}|}=1.
+\]
+                </p>
+                <blockquote>
+                    <p>易错点：定期年金关系式中对应的是生死合险 \(A_{x:\overline{n}|}\)，不是定期寿险 \(A^1_{x:\overline{n}|}\)。原因是年金停止时对应“死亡或期满”两种终止方式。</p>
+                </blockquote>
+                <p>期末终身年金也可以写出关系。由于 \(\ddot a_x=1+a_x\)，由 \(d\ddot a_x+A_x=1\) 可得</p>
+                <p class="math-block">
+\[
+1=ia_x+(1+i)A_x.
+\]
+                </p>
+                <p>同理，定期期末年金有</p>
+                <p class="math-block">
+\[
+a_{x:\overline{n}|}=\ddot a_{x:\overline{n}|}-1+{}_nE_x
+=\ddot a_{x:\overline{n+1}|}-1.
+\]
+                </p>
+                <h3>3.4 延期年金、递推与保证期年金</h3>
+                <p>延期 \(m\) 年终身连续生存年金满足</p>
+                <p class="math-block">
+\[
+{}_{m|}\bar a_x={}_mE_x\bar a_{x+m}.
+\]
+                </p>
+                <p>也可以写成</p>
+                <p class="math-block">
+\[
+{}_{m|}\bar a_x=\bar a_x-\bar a_{x:\overline{m}|}.
+\]
+                </p>
+                <p>定期连续生存年金递推公式为</p>
+                <p class="math-block">
+\[
+\bar a_{x:\overline{n}|}=\bar a_{x:\overline{m}|}+{}_mE_x\bar a_{x+m:\overline{n-m}|}.
+\]
+                </p>
+                <p>对有 \(n\) 年保证期的终身连续年金，前 \(n\) 年为确定年金，之后若仍生存才继续给付：</p>
+                <p class="math-block">
+\[
+\bar a_{\overline{n}|}+{}_nE_x\bar a_{x+n}.
+\]
+                </p>
+                <h3>3.5 一年给付 \(m\) 次的年金</h3>
+                <p>一年给付 \(m\) 次的期初年金记为 \(\ddot a_x^{(m)}\)。与寿险的关系为</p>
+                <p class="math-block">
+\[
+d^{(m)}\ddot a_x^{(m)}+A_x^{(m)}=1.
+\]
+                </p>
+                <p>其中</p>
+                <p class="math-block">
+\[
+d^{(m)}=m(1-v^{1/m}),
+\]
+                </p>
+                <p class="math-block">
+\[
+i^{(m)}=m((1+i)^{1/m}-1).
+\]
+                </p>
+                <h3>3.6 精算终值</h3>
+                <p>定期生存年金的精算终值可理解为：在已生存到期末的条件下，把年金现值折算到期末的价值。常用形式为</p>
+                <p class="math-block">
+\[
+S_{x:\overline{n}|}=\frac{a_{x:\overline{n}|}}{{}_nE_x}.
+\]
+                </p>
+                <blockquote>
+                    <p>直观理解：分母 \({}_nE_x\) 是从现在到第 \(n\) 年末且生存的精算折现因子；除以它相当于把现值转到第 \(n\) 年末的生存状态下。</p>
+                </blockquote>
+                <h3>3.7 年金模型在金融中的应用</h3>
+                <p>生存年金思想可用于含随机终止时间的金融现金流建模，例如：</p>
                 <ul class="feature-list">
-                    <li>联合生命 \(xy\)：看两人是否都活着，寿命取 \(\min\)。</li>
-                    <li>最后生存者 \(\overline{xy}\)：看是否至少一人活着，寿命取 \(\max\)。</li>
-                    <li>首次死亡保险：第一人死亡时给付，对应 \(T(xy)\)。</li>
-                    <li>最后死亡保险：最后一人死亡时给付，对应 \(T(\overline{xy})\)。</li>
-                    <li>继承年金：通常用“单生命年金减联合生命年金”表示。</li>
+                    <li>包含违约风险的债券模型；</li>
+                    <li>包含提前赎回风险的债券模型。</li>
                 </ul>
             </section>
             <section class="card">
                 <div class="section-heading">
                     <p class="section-label">章节内容</p>
-                    <h2>期末高频公式速查</h2>
+                    <h2>4. 净保费</h2>
                 </div>
-                <h3>1. 生存模型</h3>
-                <p>
-                    \[
-                    {}_tp_x=\frac{s(x+t)}{s(x)},\qquad {}_tq_x=1-{}_tp_x.
-                    \]
+                <h3>4.1 平衡原则与签单损失量</h3>
+                <p>净保费由平衡原则确定：</p>
+                <p class="math-block">
+\[
+\text{投保人缴纳保费的精算现值}=\text{保险人未来给付的精算现值}.
+\]
                 </p>
-                <p>
-                    \[
-                    {}_{u|t}q_x={}_up_x\,{}_tq_{x+u}={}_up_x-{}_{u+t}p_x.
-                    \]
+                <p>设保险人的签单损失量为</p>
+                <p class="math-block">
+\[
+L=\text{保险人未来给付现值}-\text{投保人缴纳净保费现值}.
+\]
                 </p>
-                <p>
-                    \[
-                    f_{T(x)}(t)={}_tp_x\mu_{x+t}.
-                    \]
+                <p>平衡原则等价于</p>
+                <p class="math-block">
+\[
+\mathbb{E}(L)=0.
+\]
                 </p>
-                <p>
-                    \[
-                    P(K(x)=k)={}_{k|}q_x.
-                    \]
+                <p>趸交净保费即一次性缴纳的净保费，数值上等于给付责任的精算现值。</p>
+                <h3>4.2 均衡净保费的一般计算方式</h3>
+                <p>若每年期初缴纳均衡净保费，则</p>
+                <p class="math-block">
+\[
+\text{均衡净保费}=\frac{\text{给付责任精算现值}}{\text{缴费期内期初生存年金精算现值}}.
+\]
                 </p>
-                <p>
-                    \[
-                    \mathring e_x=\int_0^\infty {}_tp_x\,dt,
-                    \qquad
-                    e_x=\sum_{k=1}^\infty {}_kp_x.
-                    \]
+                <p>例如，完全离散终身寿险的净保费为</p>
+                <p class="math-block">
+\[
+P_x=\frac{A_x}{\ddot a_x}.
+\]
                 </p>
-                <h3>2. UDD</h3>
-                <p>
-                    \[
-                    {}_tq_x=tq_x,
-                    \qquad
-                    {}_tp_x=1-tq_x,
-                    \qquad
-                    \mu_{x+t}=\frac{q_x}{1-tq_x}.
-                    \]
+                <p>半连续终身寿险，即死亡即刻给付、保费年初缴纳，有</p>
+                <p class="math-block">
+\[
+P(\bar A_x)=\frac{\bar A_x}{\ddot a_x}.
+\]
                 </p>
-                <p>
-                    \[
-                    \mathring e_x=e_x+\frac12.
-                    \]
+                <p>完全连续终身寿险，即死亡即刻给付、保费连续缴纳，有</p>
+                <p class="math-block">
+\[
+\bar P(\bar A_x)=\frac{\bar A_x}{\bar a_x}.
+\]
                 </p>
-                <h3>3. 死亡保险</h3>
-                <p>
-                    \[
-                    {}_nE_x=v^n{}_np_x.
-                    \]
+                <h3>4.3 常用净保费符号</h3>
+                                <div class="table-scroll">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>类别</th>
+                                <th>完全连续</th>
+                                <th>半连续：保费年初缴，死亡即刻给付</th>
+                                <th>完全离散</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>定期寿险</td>
+                                <td>\(\bar P(\bar A^1_{x:\overline{n}|})\)</td>
+                                <td>\(P(\bar A^1_{x:\overline{n}|})\)</td>
+                                <td>\(P^1_{x:\overline{n}|}\)</td>
+                            </tr>
+                            <tr>
+                                <td>终身寿险</td>
+                                <td>\(\bar P(\bar A_x)\)</td>
+                                <td>\(P(\bar A_x)\)</td>
+                                <td>\(P_x\)</td>
+                            </tr>
+                            <tr>
+                                <td>两全保险</td>
+                                <td>\(\bar P(\bar A_{x:\overline{n}|})\)</td>
+                                <td>\(P(\bar A_{x:\overline{n}|})\)</td>
+                                <td>\(P_{x:\overline{n}|}\)</td>
+                            </tr>
+                            <tr>
+                                <td>缴费期 \(h\) 年终身寿险</td>
+                                <td>\({}_h\bar P(\bar A_x)\)</td>
+                                <td>\({}_hP(\bar A_x)\)</td>
+                                <td>\({}_hP_x\)</td>
+                            </tr>
+                            <tr>
+                                <td>缴费期 \(h\) 年定期寿险</td>
+                                <td>\({}_h\bar P(\bar A^1_{x:\overline{n}|})\)</td>
+                                <td>\({}_hP(\bar A^1_{x:\overline{n}|})\)</td>
+                                <td>\({}_hP^1_{x:\overline{n}|}\)</td>
+                            </tr>
+                            <tr>
+                                <td>延期终身生存年金保费</td>
+                                <td>\(\bar P({}_{m|}\bar a_x)\)</td>
+                                <td>\(P({}_{m|}\bar a_x)\)</td>
+                                <td>\(P({}_{m|}\ddot a_x)\)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <h3>4.4 UDD 假设下的保费关系</h3>
+                <p>在 UDD 假设下，死亡即刻给付与死亡年末给付满足 \(\bar A=(i/\delta)A\)。若缴费方式相同，则对应净保费也满足类似关系。例如</p>
+                <p class="math-block">
+\[
+P(\bar A^1_{x:\overline{n}|})=\frac{i}{\delta}P^1_{x:\overline{n}|},
+\]
                 </p>
-                <p>
-                    \[
-                    \bar A^1_{x:\overline{n}|}=\int_0^n v^t{}_tp_x\mu_{x+t}\,dt.
-                    \]
+                <p>即</p>
+                <p class="math-block">
+\[
+\delta P(\bar A^1_{x:\overline{n}|})=iP^1_{x:\overline{n}|}.
+\]
                 </p>
-                <p>
-                    \[
-                    A^1_{x:\overline{n}|}=\sum_{k=0}^{n-1}v^{k+1}{}_{k|}q_x.
-                    \]
+                <p>若一年缴费 \(m\) 次，完全离散终身寿险的年缴总额记为 \(P_x^{(m)}\)，则</p>
+                <p class="math-block">
+\[
+P_x^{(m)}=\frac{A_x}{\ddot a_x^{(m)}}
+=\frac{P_x\ddot a_x}{\ddot a_x^{(m)}}.
+\]
                 </p>
-                <p>
-                    \[
-                    A_x=\sum_{k=0}^\infty v^{k+1}{}_{k|}q_x.
-                    \]
+                <h3>4.5 毛保费</h3>
+                <p>毛保费是在净保费基础上加入费用因素后得到的保费。基本思想为</p>
+                <p class="math-block">
+\[
+\text{毛保费收入现值}=\text{给付现值}+\text{费用现值}.
+\]
                 </p>
-                <p>
-                    \[
-                    A_x=vq_x+vp_xA_{x+1}.
-                    \]
+                <p>费用通常包括初始费用、续期费用、缴费费用、理赔费用和投资费用等。</p>
+                <p>若毛保费为 \(G\)，且每期保费中有比例费用，则计算时要把“每期随保费变化的费用”从保费年金中扣除，再列平衡方程。</p>
+                <h3>4.6 组合百分数原则</h3>
+                <p>组合百分数原则用于考虑一组同质且相互独立的保单。设单张保单签单损失量均值为 \(\mu\)，方差为 \(\sigma^2\)，组合规模为 \(n\)。记组合总损失为</p>
+                <p class="math-block">
+\[
+L_{\mathrm{agg}}=L_1+L_2+\cdots+L_n.
+\]
                 </p>
-                <p>UDD 下：</p>
-                <p>
-                    \[
-                    \bar A^1_{x:\overline{n}|}=\frac{i}{\delta}A^1_{x:\overline{n}|},
-                    \qquad
-                    \bar A_x=\frac{i}{\delta}A_x.
-                    \]
+                <p>由中心极限定理，近似有</p>
+                <p class="math-block">
+\[
+L_{\mathrm{agg}}\sim N(n\mu,n\sigma^2).
+\]
                 </p>
-                <h3>4. 生死合险</h3>
-                <p>
-                    \[
-                    A_{x:\overline{n}|}=A^1_{x:\overline{n}|}+{}_nE_x.
-                    \]
+                <p>若要求破产或亏损概率不超过 \(\alpha\)，即</p>
+                <p class="math-block">
+\[
+\mathbb{P}(L_{\mathrm{agg}}&gt;0)\le \alpha,
+\]
                 </p>
-                <p>
-                    \[
-                    \bar A_{x:\overline{n}|}=\bar A^1_{x:\overline{n}|}+{}_nE_x.
-                    \]
+                <p>等价于</p>
+                <p class="math-block">
+\[
+\mathbb{P}(L_{\mathrm{agg}}\le 0)\ge 1-\alpha.
+\]
                 </p>
-                <p>UDD 下：</p>
-                <p>
-                    \[
-                    \bar A_{x:\overline{n}|}=A_{x:\overline{n}|}+\frac{i-\delta}{\delta}A^1_{x:\overline{n}|}.
-                    \]
+                <p>标准化得到</p>
+                <p class="math-block">
+\[
+\mathbb{P}\left(
+\frac{L_{\mathrm{agg}}-n\mu}{\sqrt n\sigma}
+\le
+\frac{-n\mu}{\sqrt n\sigma}
+\right)
+\ge 1-\alpha.
+\]
                 </p>
-                <h3>5. 年金</h3>
-                <p>
-                    \[
-                    \bar a_x=\int_0^\infty v^t{}_tp_x\,dt.
-                    \]
+                <p>因此通常令</p>
+                <p class="math-block">
+\[
+\frac{-\sqrt n\mu}{\sigma}=z_{1-\alpha},
+\]
                 </p>
-                <p>
-                    \[
-                    \ddot a_x=\sum_{k=0}^\infty v^k{}_kp_x,
-                    \qquad
-                    a_x=\sum_{k=1}^\infty v^k{}_kp_x.
-                    \]
-                </p>
-                <p>
-                    \[
-                    \ddot a_x=1+a_x.
-                    \]
-                </p>
-                <p>
-                    \[
-                    \delta\bar a_x+\bar A_x=1.
-                    \]
-                </p>
-                <p>
-                    \[
-                    d\ddot a_x+A_x=1.
-                    \]
-                </p>
-                <p>
-                    \[
-                    ia_x+A_x=1.
-                    \]
-                </p>
-                <p>
-                    \[
-                    {}_{m|}\ddot a_x={}_mE_x\ddot a_{x+m}=\ddot a_x-\ddot a_{x:\overline{m}|}.
-                    \]
-                </p>
-                <h3>6. 净保费</h3>
-                <p>
-                    \[
-                    L_0=\text{给付现值}-\text{保费现值}.
-                    \]
-                </p>
-                <p>
-                    \[
-                    E(L_0)=0.
-                    \]
-                </p>
-                <p>
-                    \[
-                    P=\frac{\text{未来给付精算现值}}{\text{未来缴费年金精算现值}}.
-                    \]
-                </p>
-                <p>
-                    \[
-                    P_x=\frac{A_x}{\ddot a_x}.
-                    \]
-                </p>
-                <h3>7. 责任准备金</h3>
-                <p>
-                    \[
-                    {}_tV=E_t(\text{未来给付现值})-E_t(\text{未来保费现值}).
-                    \]
-                </p>
-                <p>
-                    \[
-                    {}_tV=A_{x+t}-P_x\ddot a_{x+t}.
-                    \]
-                </p>
-                <p>
-                    \[
-                    {}_tV+P=v\left(q_{x+t}+p_{x+t}{}_{t+1}V\right).
-                    \]
-                </p>
-                <p>
-                    \[
-                    \frac{d}{dt}{}_tV=\delta_t{}_tV+\pi_t-\mu_{x+t}(b_t-{}_tV).
-                    \]
-                </p>
-                <h3>8. 多生命</h3>
-                <p>
-                    \[
-                    T(xy)=\min\{T(x),T(y)\},
-                    \qquad
-                    T(\overline{xy})=\max\{T(x),T(y)\}.
-                    \]
-                </p>
-                <p>
-                    \[
-                    {}_tp_{xy}=P(T(x)&gt;t,T(y)&gt;t).
-                    \]
-                </p>
-                <p>独立时：</p>
-                <p>
-                    \[
-                    {}_tp_{xy}={}_tp_x{}_tp_y.
-                    \]
-                </p>
-                <p>
-                    \[
-                    {}_tp_{\overline{xy}}={}_tp_x+{}_tp_y-{}_tp_{xy}.
-                    \]
-                </p>
-                <p>
-                    \[
-                    \bar a_{xy}+\bar a_{\overline{xy}}=\bar a_x+\bar a_y.
-                    \]
-                </p>
-                <p>
-                    \[
-                    \bar A_{xy}+\bar A_{\overline{xy}}=\bar A_x+\bar A_y.
-                    \]
-                </p>
+                <p>从而确定安全附加水平。</p>
+                <blockquote>
+                    <p>注：若 \(L\) 定义为“未来给付现值减保费现值”，加入安全附加后通常会使 \(\mu&lt;0\)。</p>
+                </blockquote>
             </section>
             <section class="card">
                 <div class="section-heading">
                     <p class="section-label">章节内容</p>
-                    <h2>易错点总结</h2>
+                    <h2>5. 净责任准备金</h2>
                 </div>
-                <ol class="feature-list">
-                    <li>\(A^1_{x:\overline{n}|}\) 是定期死亡保险，\(A_{x:\overline{n}|}\) 是生死合险。</li>
-                    <li>\({}_nE_x=v^n{}_np_x\)，是纯生存保险现值，不是死亡保险。</li>
-                    <li>UDD 下 \(\bar A=\dfrac{i}{\delta}A\) 只直接适用于死亡给付部分。</li>
-                    <li>生死合险在 UDD 下不能直接整体乘 \(\dfrac{i}{\delta}\)。</li>
-                    <li>年金与寿险关系要区分 \(i,d,\delta\)：</li>
-                </ol>
-                <p>
-                    \[
-                    \delta\bar a+\bar A=1,
-                    \qquad
-                    d\ddot a+A=1,
-                    \qquad
-                    ia+A=1.
-                    \]
+                <h3>5.1 净责任准备金的含义</h3>
+                <p>净责任准备金是在保单生效后某一时刻，为覆盖未来净责任而需要提取的准备金。其基本思想是</p>
+                <p class="math-block">
+\[
+\text{准备金}=\text{未来给付现值}-\text{未来保费现值}.
+\]
                 </p>
-                <ol class="feature-list">
-                    <li>责任准备金未来法是“未来给付现值减未来保费现值”。</li>
-                    <li>修正准备金不是降低实际总保费，而是调整评估用净保费结构以反映首年费用。</li>
-                    <li>多生命中，联合生命取 \(\min\)，最后生存者取 \(\max\)。</li>
-                    <li>首次死亡保险对应联合生命状态；最后死亡保险对应最后生存者状态。</li>
-                    <li>计算方差时不能只平方精算现值，应先写出现值随机变量，再求二阶矩。</li>
-                </ol>
+                <p>设 \({}_tL\) 为 \(t\) 时刻保险人的未来损失量，则净责任准备金为</p>
+                <p class="math-block">
+\[
+{}_tV=\mathbb{E}({}_tL).
+\]
+                </p>
+                <h3>5.2 常用符号</h3>
+                                <div class="table-scroll">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>类别</th>
+                                <th>完全连续</th>
+                                <th>半连续</th>
+                                <th>完全离散</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>终身寿险 \(t\) 时刻准备金</td>
+                                <td>\({}_t\bar V(\bar A_x)\)</td>
+                                <td>\({}_tV(\bar A_x)\)</td>
+                                <td>\({}_tV_x\)</td>
+                            </tr>
+                            <tr>
+                                <td>缴费期 \(h\) 年终身寿险</td>
+                                <td>\({}_t^h\bar V(\bar A_x)\)</td>
+                                <td>\({}_t^hV(\bar A_x)\)</td>
+                                <td>\({}_t^hV_x\)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <h3>5.3 前瞻法</h3>
+                <p>完全离散终身寿险在第 \(t\) 年末的准备金为</p>
+                <p class="math-block">
+\[
+{}_tV_x=A_{x+t}-P_x\ddot a_{x+t}.
+\]
+                </p>
+                <p>若为 \(n\) 年期两全保险，则第 \(t\) 年末准备金为</p>
+                <p class="math-block">
+\[
+{}_tV_{x:\overline{n}|}=A_{x+t:\overline{n-t}|}-P_{x:\overline{n}|}\ddot a_{x+t:\overline{n-t}|}.
+\]
+                </p>
+                <p>若缴费期已满，则未来保费现值为 0，准备金只等于未来给付责任的精算现值。</p>
+                <h3>5.4 未来损失量方差</h3>
+                <p>以完全连续终身寿险为例，在 \(t\) 时刻且被保险人仍生存的条件下，未来损失量可写为</p>
+                <p class="math-block">
+\[
+{}_tL=v^{T(x)-t}-\bar P(\bar A_x)\bar a_{\overline{T(x)-t}|}.
+\]
+                </p>
+                <p>其中</p>
+                <p class="math-block">
+\[
+\bar a_{\overline{T(x)-t}|}=\frac{1-v^{T(x)-t}}{\delta}.
+\]
+                </p>
+                <p>因此</p>
+                <p class="math-block">
+\[
+{}_tL=v^{T(x)-t}-\bar P(\bar A_x)\frac{1-v^{T(x)-t}}{\delta}.
+\]
+                </p>
+                <p>整理得</p>
+                <p class="math-block">
+\[
+{}_tL=\left(1+\frac{\bar P(\bar A_x)}{\delta}\right)v^{T(x)-t}-\frac{\bar P(\bar A_x)}{\delta}.
+\]
+                </p>
+                <p>常数项不影响方差，所以</p>
+                <p class="math-block">
+\[
+\operatorname{Var}({}_tL)
+=\left(1+\frac{\bar P(\bar A_x)}{\delta}\right)^2
+\left({}^2\bar A_{x+t}-\bar A_{x+t}^{\,2}\right).
+\]
+                </p>
+                <p>由于</p>
+                <p class="math-block">
+\[
+\bar P(\bar A_x)=\frac{\bar A_x}{\bar a_x},\qquad \delta\bar a_x+\bar A_x=1,
+\]
+                </p>
+                <p>所以也可写为</p>
+                <p class="math-block">
+\[
+\operatorname{Var}({}_tL)=
+\frac{{}^2\bar A_{x+t}-\bar A_{x+t}^{\,2}}{(\delta\bar a_x)^2}.
+\]
+                </p>
+                <h3>5.5 其他形式</h3>
+                <p>完全离散终身寿险准备金还可写为</p>
+                <p class="math-block">
+\[
+{}_tV_x=(P_{x+t}-P_x)\ddot a_{x+t}.
+\]
+                </p>
+                <p>也可写为</p>
+                <p class="math-block">
+\[
+{}_tV_x=\left(1-\frac{P_x}{P_{x+t}}\right)A_{x+t}.
+\]
+                </p>
+                <blockquote>
+                    <p>注：这两式常用于利用保费符号快速表达准备金。</p>
+                </blockquote>
+                <h3>5.6 后溯公式</h3>
+                <p>完全离散终身寿险的后溯准备金为</p>
+                <p class="math-block">
+\[
+{}_tV_x=\frac{P_x\ddot a_{x:\overline{t}|}-A^1_{x:\overline{t}|}}{{}_tE_x}.
+\]
+                </p>
+                <p>也可写为</p>
+                <p class="math-block">
+\[
+{}_tV_x=P_x\ddot s_{x:\overline{t}|}-{}_t\kappa_x,
+\]
+                </p>
+                <p>其中</p>
+                <p class="math-block">
+\[
+{}_t\kappa_x=\frac{A^1_{x:\overline{t}|}}{{}_tE_x}.
+\]
+                </p>
+                <blockquote>
+                    <p>注：后溯法从过去累积角度看准备金，分子是过去保费累积值减过去保险责任累积值，再除以生存到 \(t\) 时刻的精算折现因子。</p>
+                </blockquote>
+                <h3>5.7 递推公式</h3>
+                <p>完全离散终身寿险的递推公式为</p>
+                <p class="math-block">
+\[
+{}_tV_x+P_x=vq_{x+t}+vp_{x+t}{}_{t+1}V_x.
+\]
+                </p>
+                <blockquote>
+                    <p>易错点：若死亡保险金在年末给付，第一项应为 \(vq_{x+t}\)，因为死亡给付发生在下一年年末，需要贴现一年。</p>
+                </blockquote>
+                <h3>5.8 每年缴纳 \(m\) 次保费</h3>
+                <p>若每年缴费 \(m\) 次，准备金仍按同一原则计算：</p>
+                <p class="math-block">
+\[
+\text{准备金}=\text{未来给付精算现值}-\text{未来保费精算现值}.
+\]
+                </p>
+                <p>例如在保费尚未缴满时，\(n\) 年期两全保险可按形式写为</p>
+                <p class="math-block">
+\[
+{}_tV^{(m)}_{x:\overline{n}|}
+=A_{x+t:\overline{n-t}|}-P^{(m)}_{x:\overline{n}|}\ddot a^{(m)}_{x+t:\overline{n-t}|}.
+\]
+                </p>
+                <p>若缴费期为 \(h\) 年，则未来保费年金的期限应取剩余缴费期，而不是剩余保障期。</p>
+                <h3>5.9 修正责任准备金</h3>
+                <p>实际业务中，保险公司签单初期费用较高。若仍按均衡净保费提取准备金，第一年准备金压力可能偏大。因此可采用修正净保费方法：降低第一年用于准备金计算的净保费，增加后续年度用于准备金计算的净保费。</p>
+                <p>设第一年修正净保费为 \(\alpha\)，以后各年修正净保费为 \(\beta\)。则修正准备金通常写为</p>
+                <p class="math-block">
+\[
+{}_tV^{\mathrm{MOD}}=\text{未来给付现值}-\beta\times\text{未来保费年金现值}.
+\]
+                </p>
+                <p>对 \(n\) 年期两全保险，可写为</p>
+                <p class="math-block">
+\[
+{}_tV^{\mathrm{MOD}}
+=A_{x+t:\overline{n-t}|}-\beta\ddot a_{x+t:\overline{n-t}|}.
+\]
+                </p>
+                <p>完全初年定期法，即 FPT 法，常取</p>
+                <p class="math-block">
+\[
+\alpha=A^1_{x:\overline{1}|}.
+\]
+                </p>
+                <p>对 \(n\) 年期两全保险，\(\beta\) 由等价原则确定：</p>
+                <p class="math-block">
+\[
+\alpha+\beta\,{}_1E_x\ddot a_{x+1:\overline{n-1}|}=A_{x:\overline{n}|}.
+\]
+                </p>
+                <blockquote>
+                    <p>记忆：FPT 法把第一年看成一年期定期寿险，第一年只为第一年死亡风险筹资；后续年度再承担剩余责任。</p>
+                </blockquote>
             </section>
             <section class="card">
+                <div class="section-heading">
+                    <p class="section-label">章节内容</p>
+                    <h2>6. 多生命生存模型</h2>
+                </div>
+                <h3>6.1 联合分布与联合生存函数</h3>
+                <p>设 \((x)\)、\((y)\) 的未来生存时间分别为 \(T(x)\)、\(T(y)\)。其联合分布函数为</p>
+                <p class="math-block">
+\[
+F_{T(x),T(y)}(s,t)=\mathbb{P}(T(x)\le s,T(y)\le t).
+\]
+                </p>
+                <p>联合生存函数为</p>
+                <p class="math-block">
+\[
+S_{T(x),T(y)}(s,t)=\mathbb{P}(T(x)&gt;s,T(y)&gt;t).
+\]
+                </p>
+                <p>二者满足</p>
+                <p class="math-block">
+\[
+F_{T(x),T(y)}(s,t)
+=1-S_{T(x)}(s)-S_{T(y)}(t)+S_{T(x),T(y)}(s,t).
+\]
+                </p>
+                <p>联合密度函数可写为</p>
+                <p class="math-block">
+\[
+f_{T(x),T(y)}(s,t)
+=\frac{\partial^2F_{T(x),T(y)}(s,t)}{\partial s\partial t}
+=\frac{\partial^2S_{T(x),T(y)}(s,t)}{\partial s\partial t}.
+\]
+                </p>
+                <h3>6.2 联合生存状态与最后生存状态</h3>
+                <p>联合生存状态 \((xy)\) 表示“两人都生存”。其未来生存时间为</p>
+                <p class="math-block">
+\[
+T(xy)=\min\{T(x),T(y)\}.
+\]
+                </p>
+                <p>最后生存状态 \(\overline{xy}\) 表示“至少一人生存”。其未来生存时间为</p>
+                <p class="math-block">
+\[
+T(\overline{xy})=\max\{T(x),T(y)\}.
+\]
+                </p>
+                <p>由于</p>
+                <p class="math-block">
+\[
+\{T(xy),T(\overline{xy})\}=\{T(x),T(y)\},
+\]
+                </p>
+                <p>对任意对称函数 \(g\)，有</p>
+                <p class="math-block">
+\[
+g(T(x),T(y))=g(T(xy),T(\overline{xy})).
+\]
+                </p>
+                <h3>6.3 独立情形下的常用关系</h3>
+                <p>若 \(T(x)\) 与 \(T(y)\) 独立，则</p>
+                <p class="math-block">
+\[
+{}_tp_{xy}={}_tp_x\,{}_tp_y.
+\]
+                </p>
+                <p>最后生存状态满足</p>
+                <p class="math-block">
+\[
+{}_tp_{\overline{xy}}={}_tp_x+{}_tp_y-{}_tp_x{}_tp_y.
+\]
+                </p>
+                <p>死亡概率对应为</p>
+                <p class="math-block">
+\[
+{}_tq_{xy}=1-{}_tp_x{}_tp_y.
+\]
+                </p>
+                <p>联合生存状态的死亡力为</p>
+                <p class="math-block">
+\[
+\mu_{xy}(t)=\mu_{x+t}+\mu_{y+t}.
+\]
+                </p>
+                <p>完整期望余命之间有</p>
+                <p class="math-block">
+\[
+\overset{\circ}{e}_{xy}+\overset{\circ}{e}_{\overline{xy}}
+=\overset{\circ}{e}_{x}+\overset{\circ}{e}_{y}.
+\]
+                </p>
+                <p>整值期望余命也有类似关系：</p>
+                <p class="math-block">
+\[
+e_{xy}+e_{\overline{xy}}=e_x+e_y.
+\]
+                </p>
+                <h3>6.4 死亡次序相关概率</h3>
+                <p>记 \({}_nq^1_{xy}\) 为：\((x)\) 先于 \((y)\) 死亡，且 \((x)\) 在未来 \(n\) 年内死亡的概率。若两人独立，则</p>
+                <p class="math-block">
+\[
+{}_nq^1_{xy}=\int_0^n{}_tp_x\mu_{x+t}{}_tp_y\,dt.
+\]
+                </p>
+                <p>记 \({}_nq^2_{xy}\) 为：\((x)\) 后于 \((y)\) 死亡，且 \((x)\) 在未来 \(n\) 年内死亡的概率。若两人独立，则</p>
+                <p class="math-block">
+\[
+{}_nq^2_{xy}=\int_0^n{}_tp_x\mu_{x+t}{}_tq_y\,dt.
+\]
+                </p>
+                <p>二者满足</p>
+                <p class="math-block">
+\[
+{}_nq^1_{xy}+{}_nq^2_{xy}={}_nq_x.
+\]
+                </p>
+                <p>并且</p>
+                <p class="math-block">
+\[
+{}_nq^1_{xy}={}_nq^2_{yx}+{}_np_y{}_nq_x.
+\]
+                </p>
+                <blockquote>
+                    <p>注：\({}_nq^1_{xy}\) 和 \({}_nq^2_{xy}\) 的上标是死亡次序，不是幂次。</p>
+                </blockquote>
+                <h3>6.5 多生命精算现值</h3>
+                <p>多生命模型中的寿险和年金符号与单生命类似，只是把单生命状态 \((x)\) 换成联合生存状态 \((xy)\) 或最后生存状态 \(\overline{xy}\)。</p>
+                <p>例如，联合生存状态终身寿险现值可记为 \(A_{xy}\) 或 \(\bar A_{xy}\)；最后生存状态终身寿险现值可记为 \(A_{\overline{xy}}\) 或 \(\bar A_{\overline{xy}}\)。</p>
+                <p>死亡即刻给付下，常用关系为</p>
+                <p class="math-block">
+\[
+\bar A_{xy}+\bar A_{\overline{xy}}=\bar A_x+\bar A_y.
+\]
+                </p>
+                <p>年末给付下，类似地有</p>
+                <p class="math-block">
+\[
+A_{xy}+A_{\overline{xy}}=A_x+A_y.
+\]
+                </p>
+                <p>年金也有对应关系：</p>
+                <p class="math-block">
+\[
+\bar a_{xy}+\bar a_{\overline{xy}}=\bar a_x+\bar a_y,
+\]
+                </p>
+                <p class="math-block">
+\[
+\ddot a_{xy}+\ddot a_{\overline{xy}}=\ddot a_x+\ddot a_y,
+\]
+                </p>
+                <p class="math-block">
+\[
+a_{xy}+a_{\overline{xy}}=a_x+a_y.
+\]
+                </p>
+                <h3>6.6 继承年金</h3>
+                <p>继承年金是指：对某一人给付年金，但给付以另一人死亡为前提。</p>
+                <p>例如，连续终身继承年金 \(\bar a_{x|y}\) 表示：当 \((x)\) 死亡后，只要 \((y)\) 仍生存，就向 \((y)\) 连续给付年金；若 \((y)\) 先于 \((x)\) 死亡，则不给付。</p>
+                <p>其给付区间为</p>
+                <p class="math-block">
+\[
+[\min\{T(x),T(y)\},T(y)).
+\]
+                </p>
+                <p>因此现值可看作“\((y)\) 的终身年金”减去“\((x)\) 与 \((y)\) 都生存时的联合年金”：</p>
+                <p class="math-block">
+\[
+\bar a_{x|y}=\bar a_y-\bar a_{xy}.
+\]
+                </p>
+                <blockquote>
+                    <p>记忆：继承年金是“对 \((y)\) 的年金”中，扣掉 \((x)\) 还活着时不能给的那一段。</p>
+                </blockquote>
+            </section>
+<section class="card">
                 <div class="section-heading">
                     <p class="section-label">回到首页</p>
                     <h2>继续浏览其他内容</h2>
                 </div>
                 <p><a class="text-link" href="../index.html">返回首页</a></p>
             </section>
-        </article>
+</article>
     </main>
     <footer class="site-footer">
         <p>© 2026 MNFE2O4 的作品集</p>

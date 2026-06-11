@@ -218,6 +218,12 @@ h3 {
   font-size: 1.15rem;
 }
 
+h4 {
+  margin: 20px 0 8px;
+  color: #173f5f;
+  font-size: 1.02rem;
+}
+
 p,
 li,
 th,
@@ -307,6 +313,24 @@ td {
 
 .feature-list li + li {
   margin-top: 8px;
+}
+
+.article-shell blockquote {
+  margin: 18px 0;
+  padding: 12px 16px;
+  border-left: 4px solid #5f8eaa;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  background: rgba(14, 58, 93, 0.06);
+  color: var(--muted);
+}
+
+.article-shell blockquote p {
+  margin: 0;
+}
+
+.table-scroll {
+  width: 100%;
+  overflow-x: auto;
 }
 
 table {
