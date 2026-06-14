@@ -160,9 +160,11 @@ main {
 .article-shell {
   display: grid;
   gap: 16px;
+  min-width: 0;
 }
 
 .card {
+  min-width: 0;
   padding: 28px;
   margin-bottom: 14px;
   border: 1px solid var(--line);
@@ -328,9 +330,22 @@ td {
   margin: 0;
 }
 
+.math-block,
+.article-shell mjx-container[jax="CHTML"][display="true"] {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+.article-shell mjx-container[jax="CHTML"][display="true"] {
+  padding-bottom: 0.2rem;
+}
+
 .table-scroll {
   width: 100%;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 table {
@@ -412,7 +427,21 @@ code {
     padding: 22px 18px;
   }
 
+  .article-shell .card {
+    background: var(--surface-strong);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
   h2 {
     font-size: 1.4rem;
+  }
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .article-shell .card {
+    background: var(--surface-strong);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
   }
 }
