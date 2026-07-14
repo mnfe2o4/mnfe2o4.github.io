@@ -1,3 +1,4 @@
+/* 1. 全局变量 */
 :root {
   --bg: #f4f1ea;
   --bg-accent: #e4edf4;
@@ -23,6 +24,7 @@ html {
   scroll-behavior: smooth;
 }
 
+/* 2. 基础样式 */
 body {
   margin: 0;
   font-family: "Segoe UI", "Microsoft YaHei", sans-serif;
@@ -63,6 +65,7 @@ a:focus-visible {
   outline-offset: 3px;
 }
 
+/* 3. 站点头部 */
 .site-header {
   max-width: var(--content-width);
   margin: 24px auto 0;
@@ -124,6 +127,7 @@ a:focus-visible {
   padding: 72px 24px 56px;
 }
 
+/* 紧凑大标题 */
 .hero--compact {
   padding-top: 46px;
   padding-bottom: 36px;
@@ -151,6 +155,7 @@ a:focus-visible {
   color: rgba(255, 255, 255, 0.84);
 }
 
+/* 4. 主要内容 */
 main {
   max-width: var(--content-width);
   margin: 30px auto 56px;
@@ -163,6 +168,7 @@ main {
   min-width: 0;
 }
 
+/* 卡片样式：内容块 */
 .card {
   min-width: 0;
   padding: 28px;
@@ -385,6 +391,7 @@ code {
   color: var(--muted);
 }
 
+/* 5. 手机端样式 */
 @media (max-width: 720px) {
   .site-header {
     margin-top: 16px;

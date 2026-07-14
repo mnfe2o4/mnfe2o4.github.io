@@ -465,14 +465,12 @@ $$
 
 #### 5.2.4 得分检验
 
-设 $\ell_n(\theta)$ 为对数似然函数，$\nabla\ell_n(\theta)$ 为得分函数，记 $U_n(\theta)=n^{-1/2}\nabla\ell_n(\theta)$。设 $\hat\theta_n^R$ 为 $H_0$ 约束下的 MLE，$I(\theta)$ 为单个观测对应的 Fisher 信息矩阵。在一定正则条件下，得分检验统计量为
+对于相同的检验问题，设 $\ell_n(\theta)$ 为对数似然函数，$\nabla\ell_n(\theta)$ 为得分函数，记 $U_n(\theta)=n^{-1/2}\nabla\ell_n(\theta)$。设 $\hat\theta_n^R$ 为 $H_0$ 约束下的 MLE，$I(\theta)$ 为单个观测对应的 Fisher 信息矩阵。在一定正则条件下，得分检验统计量为
 
 $$
 S_n=U_n(\hat\theta_n^R)^T I(\hat\theta_n^R)^{-1}U_n(\hat\theta_n^R)
-\xrightarrow{d}\chi_d^2,
+\xrightarrow{d}\chi_r^2,
 $$
-
-其中 $d=\dim(\Theta)-\dim(\Theta_0)$。
 
 > 得分检验的思想是：若 $H_0$ 成立，则在约束 MLE 附近，非约束方向上的得分不应过大。
 
