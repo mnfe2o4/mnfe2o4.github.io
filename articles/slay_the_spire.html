@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="杀戮尖塔卡牌价值计算初稿，尝试量化卡牌伤害、格挡、抽牌和特殊效果的基础价值。">
+    <meta name="theme-color" content="#0e3a5d">
+    <title>杀戮尖塔卡牌价值计算｜MNFE2O4</title>
+    <link rel="stylesheet" href="../style.css">
+    <script src="../article-math.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+
+<body>
+    <a class="skip-link" href="#main-content">跳转到主要内容</a>
+    <header class="site-header site-header--compact">
+        <div class="top-bar">
+            <a class="site-name" href="../index.html">MNFE2O4</a>
+            <nav class="nav-links" aria-label="主导航">
+                <a href="../index.html">首页</a>
+                <a href="../about.html">关于我</a>
+                <a href="../index.html#works">文章列表</a>
+                <a href="../index.html#contact">联系方式</a>
+            </nav>
+        </div>
+        <div class="hero hero--compact">
+            <p class="eyebrow">Game Design Notes</p>
+            <h1>杀戮尖塔卡牌价值计算</h1>
+            <p class="hero-text">以《杀戮尖塔》的卡牌参数为基础，尝试把伤害、格挡、抽牌和特殊效果转换为统一的等效价值，用于后续游戏数值分析。</p>
+        </div>
+    </header>
+    <main id="main-content">
+        <article class="article-shell">
+            <section class="card">
+                <div class="section-heading">
+                    <p class="section-label">文章简介</p>
+                    <h2>这篇初稿在整理什么</h2>
+                </div>
+                <p>以《杀戮尖塔》的卡牌参数为基础，尝试把伤害、格挡、抽牌和特殊效果转换为统一的等效价值，用于后续游戏数值分析。</p>
+            </section>
+
+
+            <section class="card" id="section-1">
+                <div class="section-heading">
+                    <p class="section-label">章节内容</p>
+                    <h2>1 卡牌基本参数</h2>
+                </div>
+                <p>对于《杀戮尖塔》中的卡牌，本文认为其基本参数包括以下几个方面：</p>
+                <ul class="feature-list">
+                <li>卡牌类型：攻击、技能、能力等。</li>
+                <li>能量消耗：使用该卡牌所需的能量值。</li>
+                <li>基础伤害：攻击类卡牌的基础伤害值。</li>
+                <li>伤害次数：攻击类卡牌的攻击次数。</li>
+                <li>格挡值：技能类卡牌提供的格挡值。</li>
+                <li>抽牌：技能类卡牌提供的抽牌数量。</li>
+                <li>弃牌：技能类卡牌提供的弃牌数量。</li>
+                <li>其他效果：卡牌可能具有的其他特殊效果，如中毒、虚弱、易伤等。</li>
+                </ul>
+            </section>
+
+            <section class="card" id="section-2">
+                <div class="section-heading">
+                    <p class="section-label">章节内容</p>
+                    <h2>2 卡牌基础价值</h2>
+                </div>
+                <h3>2.1 卡牌效果的量化</h3>
+                <h4>2.1.1 卡牌效果的比较基准</h4>
+                <p>为了衡量卡牌的价值，我们需要建立一个比较基准。而在游戏中，对战斗的影响主要体现在伤害输出上，因此我们将“造成1点伤害”作为衡量卡牌价值的基本单位。对于卡牌的其他效果，如格挡、抽牌等，我们需要将其转换为等效的伤害值，以便进行统一的比较。</p>
+                <h4>2.2.2 攻击效果值</h4>
+                <p>对于卡牌的攻击效果，其价值主要体现在其造成的伤害上。我们可以通过以下公式来计算卡牌的攻击效果值：</p>
+                <p class="math-block">
+                \[
+                E_{\text{attack}} = D \times N
+                \]
+                </p>
+                <p>其中，\(E_{\text{attack}}\) 表示攻击效果值，\(D\) 表示卡牌的基础伤害，\(N\) 表示卡牌的伤害次数。</p>
+                <h4>2.2.3 格挡效果值</h4>
+                <p>对于卡牌的格挡效果，其价值主要体现在其提供的格挡值上。我们可以通过以下公式来计算卡牌的格挡效果值：</p>
+                <p class="math-block">
+                \[
+                E_{\text{block}} = \alpha_b B
+                \]
+                </p>
+                <p>其中，\(E_{\text{block}}\) 表示格挡效果值，\(B\) 表示卡牌的格挡值，\(\alpha_b\) 为格挡值的等效伤害系数。对于格挡值的等效伤害系数，我们将在后续章节中进行详细讨论。在这里，我们暂时假设 \(\alpha_b = 1\)，即每1点格挡值等效于1点伤害。</p>
+                <h4>2.2.4 其他效果值</h4>
+                <p>对于卡牌的其他效果，我们同样也应该应用类似的量化方法，将其转换为等效的伤害值或等效的格挡值。在这里，我们先参考17173网站上的文章<a href="https://news.17173.com/content/01302026/173052755.shtml">《杀戮尖塔》拆解案（以战斗系统为主）</a>，规定了各种效果的等效伤害系数，如下表所示：</p>
+                <div class="table-scroll">
+                <table>
+                <thead>
+                <tr>
+                <th style="text-align:center">效果</th>
+                <th style="text-align:center">等效伤害系数</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                <td style="text-align:center">抽牌、弃牌</td>
+                <td style="text-align:center">3</td>
+                </tr>
+                <tr>
+                <td style="text-align:center">易伤、虚弱</td>
+                <td style="text-align:center">4</td>
+                </tr>
+                <tr>
+                <td style="text-align:center">力量、敏捷</td>
+                <td style="text-align:center">2</td>
+                </tr>
+                <tr>
+                <td style="text-align:center">获得能量</td>
+                <td style="text-align:center">5</td>
+                </tr>
+                <tr>
+                <td style="text-align:center">永久强化效果</td>
+                <td style="text-align:center">8</td>
+                </tr>
+                </tbody>
+                </table>
+                </div>
+                <p>值得注意的是，这些系数是基于游戏机制和经验总结得出的，可能会因玩家的策略和游戏环境而有所不同。我们将在后续章节中对这些系数进行进一步的分析和调整，以确保其在不同情况下的适用性和准确性。</p>
+                <p>在上述假设下，我们可以将卡牌的其他效果值计算为：</p>
+                <p class="math-block">
+                \[
+                E_{\text{other}} = \sum_{i} \alpha_i E_i
+                \]
+                </p>
+                <p>其中，\(E_{\text{other}}\) 表示其他效果值，\(\alpha_i\) 表示第 \(i\) 个效果的等效伤害系数，\(E_i\) 表示第 \(i\) 个效果的数值。</p>
+                <h3>2.3 卡牌基础价值</h3>
+                <p>根据上述分析，我们可以将卡牌的总效果值计算为：</p>
+                <p class="math-block">
+                \[
+                E_{\text{total}} = E_{\text{attack}} + E_{\text{block}} + E_{\text{other}}
+                \]
+                </p>
+                <p>考虑到每张卡牌的能量消耗，我们可以将卡牌的基础价值定义为其总效果值与能量消耗的比值，即：</p>
+                <p class="math-block">
+                \[
+                V_b = \frac{E_{\text{total}}}{C}
+                \]
+                </p>
+                <p>其中，\(V_b\) 表示卡牌的基础价值，\(C\) 表示卡牌的能量消耗。</p>
+                <h4>2.3.1 基础价值的计算示例</h4>
+                <p>我们接下来根据该公式计算打击、痛击、重锤、顺劈斩、铁斩波、双重打击的基础价值（我们以升级前的数据为准）：</p>
+                <div class="table-scroll">
+                <table>
+                <thead>
+                <tr>
+                <th style="text-align:center">卡牌</th>
+                <th style="text-align:right">\(C\)</th>
+                <th style="text-align:right">\(E_{\text{attack}}\)</th>
+                <th style="text-align:right">\(E_{\text{block}}\)</th>
+                <th style="text-align:right">\(E_{\text{other}}\)</th>
+                <th style="text-align:right">\(E_{\text{total}}\)</th>
+                <th style="text-align:right">\(V_b\)</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                <td style="text-align:center">打击</td>
+                <td style="text-align:right">1</td>
+                <td style="text-align:right">6</td>
+                <td style="text-align:right">0</td>
+                <td style="text-align:right">0</td>
+                <td style="text-align:right">6</td>
+                <td style="text-align:right">6</td>
+                </tr>
+                <tr>
+                <td style="text-align:center">痛击</td>
+                <td style="text-align:right">2</td>
+                <td style="text-align:right">8</td>
+                <td style="text-align:right">0</td>
+                <td style="text-align:right">8</td>
+                <td style="text-align:right">16</td>
+                <td style="text-align:right">8</td>
+                </tr>
+                <tr>
+                <td style="text-align:center">重锤</td>
+                <td style="text-align:right">3</td>
+                <td style="text-align:right">32</td>
+                <td style="text-align:right">0</td>
+                <td style="text-align:right">0</td>
+                <td style="text-align:right">32</td>
+                <td style="text-align:right">10.67</td>
+                </tr>
+                <tr>
+                <td style="text-align:center">顺劈斩</td>
+                <td style="text-align:right">1</td>
+                <td style="text-align:right">8</td>
+                <td style="text-align:right">0</td>
+                <td style="text-align:right">0</td>
+                <td style="text-align:right">8</td>
+                <td style="text-align:right">8</td>
+                </tr>
+                <tr>
+                <td style="text-align:center">铁斩波</td>
+                <td style="text-align:right">1</td>
+                <td style="text-align:right">5</td>
+                <td style="text-align:right">5</td>
+                <td style="text-align:right">0</td>
+                <td style="text-align:right">10</td>
+                <td style="text-align:right">10</td>
+                </tr>
+                <tr>
+                <td style="text-align:center">双重打击</td>
+                <td style="text-align:right">1</td>
+                <td style="text-align:right">10</td>
+                <td style="text-align:right">0</td>
+                <td style="text-align:right">0</td>
+                <td style="text-align:right">10</td>
+                <td style="text-align:right">10</td>
+                </tr>
+                <tr>
+                <td style="text-align:center">剑柄打击</td>
+                <td style="text-align:right">1</td>
+                <td style="text-align:right">9</td>
+                <td style="text-align:right">0</td>
+                <td style="text-align:right">3</td>
+                <td style="text-align:right">12</td>
+                <td style="text-align:right">12</td>
+                </tr>
+                <tr>
+                <td style="text-align:center">金刚臂</td>
+                <td style="text-align:right">2</td>
+                <td style="text-align:right">12</td>
+                <td style="text-align:right">0</td>
+                <td style="text-align:right">8</td>
+                <td style="text-align:right">20</td>
+                <td style="text-align:right">10</td>
+                </tr>
+                </tbody>
+                </table>
+                </div>
+                <h4>2.3.2 基础价值的分析</h4>
+                <p>在上述案例中，我们可以发现基础价值的数值其实并不完全符合我们对卡牌价值的直观感受。例如，重锤的价值虽高于打击和痛击，但实际上在实战中的表现并不如其基础价值所显示的那样出色。这是因为重锤的高能量消耗使其在卡组中常常会有“卡手”的情况。同时，顺劈斩作为AOE攻击牌，其在面对多个敌人时的价值远高于单体攻击牌，但在基础价值计算中并未体现出这一点。因此，我们需要对基础价值进行进一步的调整和修正，以更准确地反映卡牌在实际游戏中的价值。</p>
+                <h3>2.4 基础价值计算存在的问题</h3>
+                <p>上述基础价值的公式为每张牌计算了一个基础价值，但许多情况下，数值并不与预期相符。例如，某些卡牌的基础价值可能会因为其特殊效果而被高估或低估。因此，我们需要对基础价值进行进一步的调整，以更准确地反映卡牌在实际游戏中的价值。</p>
+                <p>我们需要考虑以下几个方面：</p>
+                <ul class="feature-list">
+                <li>AOE伤害的价值：在游戏中，许多卡牌具有范围伤害效果，这种效果可能会对多个敌人造成伤害，从而在战斗中产生更大的影响。因此，我们需要对AOE伤害的价值进行调整，以更准确地反映其在实际游戏中的价值。</li>
+                <li>伤害的时间价值：在游戏中，造成伤害的回合往往也会成为影响卡牌价值的重要因素。越靠前造成的伤害，越能影响战局，因此我们需要对伤害的时间价值进行调整。</li>
+                <li>等效伤害系数的修正：在上述分析中，我们基于经验对各种效果的等效伤害系数进行了假设，但在实际情况中，尤其是对于一些特殊效果的卡牌，如中毒、虚弱等，其实际价值可能会因敌人的属性和战斗环境而有所不同。因此，我们需要对这些系数进行修正，以更准确地反映卡牌的实际价值。</li>
+                <li>卡组大小的修正：在游戏中，卡组的大小会影响卡牌的抽取概率和使用频率，从而影响其实际价值。我们需要考虑卡组大小对卡牌价值的修正，以更准确地反映其在不同卡组中的表现。</li>
+                <li>能量消耗的价值：在上述分析中，我们将卡牌的基础价值定义为总效果值与能量消耗的比值。但这种定义可能会导致一些高能量消耗的卡牌被低估，而一些低能量消耗的卡牌被高估。因此，我们需要对能量消耗的价值进行修正，以更准确地反映卡牌在实际游戏中的价值。</li>
+                <li>各种不同效果的相互作用关系：在游戏中，卡牌的各种效果可能会相互作用，从而影响其实际价值。因此，我们需要考虑各种不同效果的相互作用关系，以更准确地反映卡牌在实际游戏中的价值。</li>
+                </ul>
+                <p>正是由于上述种种原因的存在，导致了基础价值计算存在一定的局限性。因此，我们需要对基础价值进行进一步的调整和修正，以更准确地反映卡牌在实际游戏中的价值。</p>
+            </section>
+
+            <section class="card">
+                <div class="section-heading">
+                    <p class="section-label">回到首页</p>
+                    <h2>继续浏览其他内容</h2>
+                </div>
+                <p><a class="text-link" href="../index.html">返回首页</a></p>
+            </section>
+        </article>
+    </main>
+    <footer class="site-footer">
+        <p>© 2026 MNFE2O4 的作品集</p>
+    </footer>
+</body>
+
+</html>
