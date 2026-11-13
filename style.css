@@ -379,6 +379,59 @@ code {
   font-family: "Cascadia Code", Consolas, monospace;
 }
 
+.article-shell pre {
+  margin: 16px 0;
+  padding: 14px 16px;
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: rgba(14, 58, 93, 0.06);
+  -webkit-overflow-scrolling: touch;
+}
+
+.article-shell pre code {
+  padding: 0;
+  background: none;
+  white-space: pre;
+}
+
+/* 文章插图 */
+.article-figure {
+  margin: 22px 0;
+}
+
+.article-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface-strong);
+}
+
+.article-figure figcaption,
+.figure-grid figcaption {
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.figure-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  margin: 22px 0;
+}
+
+.figure-grid .article-figure {
+  margin: 0;
+}
+
+.figure-grid figcaption {
+  margin-top: 8px;
+  font-size: 0.9rem;
+}
+
 .not-found-card {
   text-align: center;
 }

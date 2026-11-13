@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Monte Carlo 归一化常数估计实验：二维非线性目标、均匀采样的截断偏差、三种高斯重要性采样建议分布、精确采样对照，以及从重复估计汇总出的经验误差。">
+    <meta name="theme-color" content="#0e3a5d">
+    <title>Monte Carlo 归一化常数估计｜MNFE2O4</title>
+    <link rel="stylesheet" href="../style.css">
+    <script src="../article-math.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+
+<body>
+    <a class="skip-link" href="#main-content">跳转到主要内容</a>
+
+    <header class="site-header site-header--compact">
+        <div class="top-bar">
+            <a class="site-name" href="../index.html">MNFE2O4</a>
+            <nav class="nav-links" aria-label="主导航">
+                <a href="../index.html">首页</a>
+                <a href="../about.html">关于我</a>
+                <a href="../index.html#works">文章列表</a>
+                <a href="../index.html#contact">联系方式</a>
+            </nav>
+        </div>
+
+        <div class="hero hero--compact">
+            <p class="eyebrow">Monte Carlo Experiment</p>
+            <h1>Monte Carlo 归一化常数估计</h1>
+            <p class="hero-text">在一条弯曲的二维高密度脊线上，比较均匀采样、三种高斯重要性采样建议分布与精确采样对照，并整理 4,640 条重复估计的经验误差。</p>
+        </div>
+    </header>
+
+    <main id="main-content">
+        <article class="article-shell">
+            <section class="card">
+                <div class="section-heading">
+                    <p class="section-label">文章简介</p>
+                    <h2>这份实验整理回答什么</h2>
+                </div>
+                <p>
+                    这篇文章整理 <a href="https://github.com/mnfe2o4/monte-carlo" target="_blank" rel="noreferrer">monte-carlo</a>
+                    项目的结果：对一个可以解析求出真值的二维目标，用均匀采样和重要性采样估计归一化常数，并比较不同建议分布在有限样本下的表现。
+                </p>
+                <p>
+                    关注点不是“哪种方法最好”，而是三件更具体的事：均匀采样的截断偏差在多大样本量下开始主导误差；高斯建议分布的形状如何影响权重的尾部；以及有限次重复得到的经验 RMSE 能说明什么、不能说明什么。
+                </p>
+            </section>
+
+            <section class="card">
+                <div class="section-heading">
+                    <p class="section-label">问题与真值</p>
+                    <h2>一个沿抛物线弯曲的目标</h2>
+                </div>
+                <p>
+                    未归一化密度取为
+                </p>
+                <p>
+                    \[
+                    \widetilde{\rho}(x_1,x_2)
+                    =\exp\left[-\frac{x_1^2}{2}
+                    -\frac{(2x_2+x_1^2-1)^2}{2}\right],
+                    \qquad
+                    Z=\int_{\mathbb R^2}\widetilde{\rho}(x)\,dx .
+                    \]
+                </p>
+                <p>
+                    固定 \(x_1\) 时，\(\widetilde{\rho}\) 关于 \(x_2\) 是一个方差为 \(1/4\) 的高斯核，均值落在
+                    \(x_2=(1-x_1^2)/2\) 上。因此高密度区域沿这条抛物线分布，而不是集中在一个圆形或椭圆形的众数附近。
+                </p>
+                <p>
+                    令 \(u=x_1\)、\(v=2x_2+x_1^2-1\)，逆变换的 Jacobian 绝对值为 \(1/2\)，于是
+                </p>
+                <p>
+                    \[
+                    Z=\frac12\int_{\mathbb R^2}e^{-(u^2+v^2)/2}\,du\,dv=\pi .
+                    \]
+                </p>
+                <p>
+                    这给了我们一个精确真值 \(\pi\)，使所有经验误差都可以直接对照，而不需要嵌套估计。
+                </p>
+                <p>
+                    均匀采样只能在有限区域上进行。在 \([-4,4]^2\) 上，
+                    \(Z_{[-4,4]^2}\approx 3.131708411797\)，截断偏差约为
+                    \(-0.009884241793\)；在 \([-6,6]^2\) 上，
+                    \(Z_{[-6,6]^2}\approx 3.140462\)，截断偏差约为 \(-0.001130\)。
+                    本文所有经验 RMSE 都以完整真值 \(\pi\) 为参照，因此均匀采样的结果里天然包含这部分截断误差。
+                </p>
+            </section>
+
+            <section class="card">
+                <div class="section-heading">
+                    <p class="section-label">方法</p>
+                    <h2>从均匀采样到重要性采样</h2>
+                </div>
+                <p>
+                    对密度为 \(p\) 的采样分布，Monte Carlo 积分估计量为
+                </p>
+                <p>
+                    \[
+                    \widehat Z_N=\frac1N\sum_{i=1}^N f(X_i),
+                    \qquad X_i\overset{\text{i.i.d.}}{\sim}p,
+                    \]
+                </p>
+                <p>
+                    其中 \(f=\widetilde{\rho}/p\)。当 \(\widehat Z_N\) 无偏时，
+                    \(\operatorname{MSE}=\operatorname{Var}(\widehat Z_N)=\sigma^2/N\)；
+                    若存在偏差 \(b\)，则
+                    \(\operatorname{MSE}=\sigma^2/N+b^2\)。
+                    这正是后面区分“方差主导”和“偏差主导”的依据。
+                </p>
+                <p>
+                    均匀采样取 \(p=\mathcal U(\Omega)\)，估计量为
+                    \(\widehat Z_N^{\mathrm{Unif}}=\mu(\Omega)N^{-1}\sum_i\widetilde{\rho}(X_i)\)；
+                    重要性采样取建议分布 \(q\)，估计量为
+                </p>
+                <p>
+                    \[
+                    \widehat Z_N^{\mathrm{IS}}
+                    =\frac1N\sum_{i=1}^N\frac{\widetilde{\rho}(Y_i)}{q(Y_i)},
+                    \qquad Y_i\overset{\text{i.i.d.}}{\sim}q .
+                    \]
+                </p>
+                <p>
+                    在本题中 \(q\) 取二维高斯。为了让比较集中在“建议分布设计”这一步，三种高斯方案共享同一套抽样、对数权重计算和重复估计流程，只改变均值与协方差：
+                </p>
+
+                <div class="table-scroll">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>方法</th>
+                                <th>建议分布 / 采样分布</th>
+                                <th>设计依据</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Uniform MC</td>
+                                <td>\(U([-4,4]^2)\)</td>
+                                <td>估计截断积分，对完整积分有固定偏差</td>
+                            </tr>
+                            <tr>
+                                <td>Uniform MC（大区域）</td>
+                                <td>\(U([-6,6]^2)\)</td>
+                                <td>偏差更小，但同时引入更大的采样方差</td>
+                            </tr>
+                            <tr>
+                                <td>Initial Gaussian IS</td>
+                                <td>\(\mathcal N((0,0.5),\operatorname{diag}(1,0.25))\)</td>
+                                <td>众数处的局部 Hessian 近似</td>
+                            </tr>
+                            <tr>
+                                <td>Moment-matched Gaussian IS</td>
+                                <td>\(\mathcal N((0,0),\operatorname{diag}(1,0.75))\)</td>
+                                <td>匹配目标分布的一、二阶矩</td>
+                            </tr>
+                            <tr>
+                                <td>Refined Gaussian IS</td>
+                                <td>\(\mathcal N((0,0),\operatorname{diag}(2.46006384,1.40547353))\)</td>
+                                <td>在 \(N=10^4\) 上最小化经验 RMSE 调参</td>
+                            </tr>
+                            <tr>
+                                <td>Exact sampling</td>
+                                <td>\(q=\widetilde{\rho}/\pi\)</td>
+                                <td>解析采样对照，权重恒为 \(\pi\)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <p>
+                    精确采样利用本题的换元结构：先取 \(X_1\sim\mathcal N(0,1)\)，再取
+                    \(X_2\mid X_1=x\sim\mathcal N\!\left(\frac{1-x^2}{2},\frac14\right)\)。
+                    此时样本恰好来自归一化目标，权重恒为 \(\pi\)，理论方差为零。
+                    它只用于检查抽样与估计流程的实现，不代表一般未知归一化常数问题也有这样的捷径。
+                </p>
+            </section>
+
+            <section class="card">
+                <div class="section-heading">
+                    <p class="section-label">实验设置</p>
+                    <h2>同一批重复估计，同一套统计口径</h2>
+                </div>
+                <p>
+                    主实验取 \(N\in\{100,300,1000,3000,10000,30000,100000\}\)，每个 \(N\) 独立重复 \(R=100\) 次。
+                    此外，均匀采样另做了大样本扩展：\(N\) 从 \(10^2\) 延伸到 \(10^7\)，每个 \(N\) 重复 \(R=20\) 次。
+                    六个主实验入口合计 \(6\times7\times100=4{,}200\) 条重复估计，大样本扩展再增加 \(2\times11\times20=440\) 条，共 4,640 条。
+                </p>
+                <p>
+                    流程分为三层：<code>results/raw/</code> 保存每一轮重复估计；<code>results/summary/</code>
+                    按方法和 \(N\) 汇总均值、偏差、样本方差、RMSE 及绝对误差分位数；比较图只读取同一份 summary。
+                    这样比较图中的均值与 RMSE 来自同一批数据，不会出现“图用一套样本、表用另一套样本”的情况。
+                </p>
+                <p>
+                    调参与正式评价使用不同的随机流：调参固定 <code>seed=20261008</code>，四方法比较使用
+                    <code>seed=20260930</code>。调参只在 \(N=10^4\)、\(R=100\) 的预算下搜索，得到的参数随后固定，不参与正式评价。
+                </p>
+                <p>
+                    单方法估计图展示的是每个 \(N\) 的第一轮估计，而四方法比较图展示 \(R\) 次重复的均值；两者的 RMSE 都用全部重复估计计算。
+                    读图时需要区分这两个不同的统计量。
+                </p>
+            </section>
+
+            <section class="card">
+                <div class="section-heading">
+                    <p class="section-label">结果一</p>
+                    <h2>均匀采样：先看到收敛，再看到截断下界</h2>
+                </div>
+
+                <figure class="article-figure">
+                    <img src="images/monte-carlo/target_heatmap.png" alt="目标密度在 [-4,4] 平方区域上的热力图，高密度区域沿抛物线弯曲" loading="lazy">
+                    <figcaption>\(\widetilde{\rho}\) 在 \([-4,4]^2\) 上的热力图。高密度区域沿 \(x_2=(1-x_1^2)/2\) 弯曲，这解释了为什么椭圆形的建议分布难以贴合目标。</figcaption>
+                </figure>
+
+                <p>
+                    在 \([-4,4]^2\) 和 \([-6,6]^2\) 两个区域上，均匀采样的经验 RMSE 在双对数坐标下都近似线性下降，
+                    拟合斜率分别为 \(-0.48\) 和 \(-0.51\)，接近通常的 \(N^{-1/2}\)。在 \(N\le10^5\) 的范围内，主要由采样方差决定误差。
+                </p>
+                <p>
+                    大样本扩展则显示出两种不同的极限行为。\([-4,4]^2\) 的 RMSE 在 \(N\approx10^6\) 之后趋于平缓，
+                    到 \(N=10^7\) 时为 \(0.010810\)，已经贴近截断偏差 \(|b|=0.009884\)；
+                    继续增大样本量只能把方差压小，无法消除这部分固定偏差。
+                    \([-6,6]^2\) 的偏差只有 \(0.001130\)，但区域更大、单样本方差更高，因此在中小样本下 RMSE 反而更大；
+                    随着 \(N\) 增大，它在 \(10^6\) 到 \(10^7\) 之间反超，并在 \(N=10^7\) 达到 \(0.005502\)。
+                </p>
+
+                <div class="table-scroll">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>\(N\)</th>
+                                <th>\([-4,4]^2\) RMSE</th>
+                                <th>\([-4,4]^2\) 偏差</th>
+                                <th>\([-6,6]^2\) RMSE</th>
+                                <th>\([-6,6]^2\) 偏差</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>\(10^5\)</td>
+                                <td>0.034756</td>
+                                <td>−0.014861</td>
+                                <td>0.039102</td>
+                                <td>+0.003700</td>
+                            </tr>
+                            <tr>
+                                <td>\(10^6\)</td>
+                                <td>0.011786</td>
+                                <td>−0.009005</td>
+                                <td>0.018171</td>
+                                <td>−0.003767</td>
+                            </tr>
+                            <tr>
+                                <td>\(10^7\)</td>
+                                <td>0.010810</td>
+                                <td>−0.010386</td>
+                                <td>0.005502</td>
+                                <td>−0.000400</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>
+                    这两组大样本数字各只有 20 次重复，单点波动不可忽略，适合看趋势而不是比较小数点后几位。
+                </p>
+
+                <figure class="article-figure">
+                    <img src="images/monte-carlo/uniform_rmse_comparison.png" alt="两个积分区域下均匀 Monte Carlo 的 RMSE 随样本量变化，并标出截断偏差参考线" loading="lazy">
+                    <figcaption>均匀采样的经验 RMSE：左图为 \([-4,4]^2\)，右图为 \([-6,6]^2\)。灰虚线是截断偏差的绝对值，它给出了 \([-4,4]^2\) 的误差下界。</figcaption>
+                </figure>
+            </section>
+
+            <section class="card">
+                <div class="section-heading">
+                    <p class="section-label">结果二</p>
+                    <h2>高斯建议分布：形状比众数更重要</h2>
+                </div>
+                <p>
+                    初始高斯方案把均值放在众数 \((0,0.5)\)，协方差取众数处的局部 Hessian 逆，
+                    看起来是一个“标准”的高斯近似。但它的经验 RMSE 几乎不随 \(N\) 下降：
+                    \(N=100\) 时为 \(0.528\)，\(N=10^5\) 时反而升到 \(1.258\)。
+                    原因是这条弯曲的脊线远离众数后仍然有不可忽略的密度，而初始建议分布在那些位置迅速衰减，
+                    偶发的大权重把平方误差拉高。
+                </p>
+
+                <div class="figure-grid">
+                    <figure class="article-figure">
+                        <img src="images/monte-carlo/gaussian_rmse.png" alt="初始高斯建议分布的 RMSE 随样本量剧烈波动" loading="lazy">
+                        <figcaption>初始高斯：RMSE 随 \(N\) 上下跳动，拟合斜率约为 \(+0.05\)。</figcaption>
+                    </figure>
+                    <figure class="article-figure">
+                        <img src="images/monte-carlo/refined_gaussian_rmse.png" alt="调参后高斯建议分布的 RMSE 随样本量平稳下降" loading="lazy">
+                        <figcaption>调参后高斯：RMSE 平稳下降，拟合斜率约为 \(-0.46\)。</figcaption>
+                    </figure>
+                </div>
+
+                <p>
+                    匹配目标的一、二阶矩（\(m=(0,0)\)，\(\Sigma=\operatorname{diag}(1,0.75)\)）纠正了均值位置，
+                    但没有解决“目标沿曲线分布、建议分布是椭圆”的结构错配，因此只是把误差拉回和均匀采样相近的量级。
+                    以 \(N=10^4\)、固定随机流最小化经验 RMSE 得到的调参方案，则把协方差放大到
+                    \(\operatorname{diag}(2.4601,1.4055)\)，让建议分布覆盖更宽的脊线区域，在当前预算下取得最低误差。
+                </p>
+
+                <figure class="article-figure">
+                    <img src="images/monte-carlo/comparison.png" alt="四种方法在七个样本量下的重复均值与经验 RMSE 比较" loading="lazy">
+                    <figcaption>四种非 oracle 方法的重复均值（左）与经验 RMSE（右）。虚线是各方法的幂律拟合，只描述这批结果，不作为理论收敛阶的证据。</figcaption>
+                </figure>
+
+                <p>
+                    下表列出四个方法在 7 个样本量上的经验 RMSE，数值直接取自同一份 summary。
+                </p>
+
+                <div class="table-scroll">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>\(N\)</th>
+                                <th>Uniform MC</th>
+                                <th>Initial Gaussian</th>
+                                <th>Moment-matched Gaussian</th>
+                                <th>Refined Gaussian</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>100</td>
+                                <td>0.956330</td>
+                                <td>0.527914</td>
+                                <td>1.375167</td>
+                                <td>0.384484</td>
+                            </tr>
+                            <tr>
+                                <td>300</td>
+                                <td>0.457914</td>
+                                <td>1.035333</td>
+                                <td>1.884500</td>
+                                <td>0.302643</td>
+                            </tr>
+                            <tr>
+                                <td>1,000</td>
+                                <td>0.305172</td>
+                                <td>1.169970</td>
+                                <td>0.230737</td>
+                                <td>0.120585</td>
+                            </tr>
+                            <tr>
+                                <td>3,000</td>
+                                <td>0.186589</td>
+                                <td>0.297524</td>
+                                <td>0.143133</td>
+                                <td>0.064131</td>
+                            </tr>
+                            <tr>
+                                <td>10,000</td>
+                                <td>0.095375</td>
+                                <td>0.907684</td>
+                                <td>0.104686</td>
+                                <td>0.039548</td>
+                            </tr>
+                            <tr>
+                                <td>30,000</td>
+                                <td>0.058480</td>
+                                <td>0.716193</td>
+                                <td>0.055093</td>
+                                <td>0.043841</td>
+                            </tr>
+                            <tr>
+                                <td>100,000</td>
+                                <td>0.030459</td>
+                                <td>1.258050</td>
+                                <td>0.061507</td>
+                                <td>0.015139</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <p>
+                    \(N=10^5\) 时，调参后高斯的 RMSE 为 \(0.0151\)，低于均匀采样的 \(0.0305\)；
+                    但均匀采样的误差里含有 \(0.0099\) 的截断偏差，两者并不是同一类误差。
+                    初始高斯的中位绝对误差只有 \(0.160\)，RMSE 却达到 \(1.258\)，最大误差 \(12.13\)，
+                    说明平方误差几乎被少数极端重复主导。这也是为什么表里同时保留分位数和最大值：
+                </p>
+
+                <div class="table-scroll">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>方法（\(N=10^5\)）</th>
+                                <th>经验 RMSE</th>
+                                <th>中位绝对误差</th>
+                                <th>95% 分位绝对误差</th>
+                                <th>最大绝对误差</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Uniform MC \([-4,4]^2\)</td>
+                                <td>0.030459</td>
+                                <td>0.021671</td>
+                                <td>0.057311</td>
+                                <td>0.080882</td>
+                            </tr>
+                            <tr>
+                                <td>Initial Gaussian IS</td>
+                                <td>1.258050</td>
+                                <td>0.159956</td>
+                                <td>0.278879</td>
+                                <td>12.126419</td>
+                            </tr>
+                            <tr>
+                                <td>Moment-matched Gaussian IS</td>
+                                <td>0.061507</td>
+                                <td>0.027735</td>
+                                <td>0.093149</td>
+                                <td>0.446999</td>
+                            </tr>
+                            <tr>
+                                <td>Refined Gaussian IS</td>
+                                <td>0.015139</td>
+                                <td>0.009119</td>
+                                <td>0.029311</td>
+                                <td>0.063860</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <figure class="article-figure">
+                    <img src="images/monte-carlo/weights_heatmap_comparison.png" alt="三种高斯建议分布的对数重要性权重热力图，使用相同色标" loading="lazy">
+                    <figcaption>三种高斯建议分布在 \([-4,4]^2\) 上的对数权重 \(\log_{10}w(x)\)，三幅图共用同一色标。热力图只能展示局部匹配情况，无法证明全空间权重方差有限。</figcaption>
+                </figure>
+            </section>
+
+            <section class="card">
+                <div class="section-heading">
+                    <p class="section-label">结果边界</p>
+                    <h2>为什么高斯 IS 的有限样本曲线不能外推</h2>
+                </div>
+                <p>
+                    对本实验采用的对角高斯建议分布 \(q=\mathcal N((0,a),\operatorname{diag}(b,c))\)，权重的二阶矩实际上是无穷的。
+                    仍取 \(y_1=x_1\)、\(y_2=2x_2+x_1^2-1\)，在 \(|y_2|\le1\) 的带状区域内，
+                </p>
+                <p>
+                    \[
+                    \log\frac{\widetilde{\rho}(x)^2}{q(x)}
+                    =\frac{y_1^4}{8c}+O(y_1^2),
+                    \qquad y_1\to\infty .
+                    \]
+                </p>
+                <p>
+                    由于 \(c>0\)，被积函数沿 \(y_1\) 方向以 \(\exp(y_1^4/(16c))\) 量级增长，
+                    \(\int_{\mathbb R^2}\widetilde{\rho}(x)^2/q(x)\,dx\) 发散。也就是说，
+                    \(\operatorname{Var}_q(w)=\infty\)，理论 MSE 和 RMSE 对任意有限 \(N\) 都是无穷。
+                    三个高斯方案都满足 \(\mathbb E_q[w]=\pi<\infty\)，所以估计量仍然无偏且强相合；
+                    但“无偏”与“有限方差”是两件事。
+                </p>
+                <p>
+                    这解释了一个容易误读的现象：调参后高斯在 \(N=10^5\) 上有最小的经验 RMSE，
+                    但这批 100 次重复并没有抽到足够极端的样本，经验方差仍然是有限的。
+                    图中的拟合斜率 \(-0.46\) 只描述这 7 个点的有限样本表现，不能据此断言普通的 \(N^{-1/2}\) 收敛率。
+                    若要真正比较理论效率，需要讨论权重的尾指数或采用有界权重的建议分布。
+                </p>
+                <p>
+                    精确采样对照从另一侧验证了流程：权重恒为 \(\pi\)，经验 RMSE 为零或机器精度量级
+                    （summary 中约 \(4.4\times10^{-16}\)）。由于零 RMSE 无法放在对数坐标上，它没有进入四方法比较图。
+                </p>
+            </section>
+
+            <section class="card">
+                <div class="section-heading">
+                    <p class="section-label">结论</p>
+                    <h2>这批结果支持与不支持的结论</h2>
+                </div>
+                <ul class="feature-list">
+                    <li>均匀采样对截断积分无偏，对完整积分有固定偏差；在 \([-4,4]^2\) 上，这个偏差在 \(N\approx10^6\) 之后成为误差主导项，约 \(0.0099\) 的误差下界无法靠增大 \(N\) 消除。</li>
+                    <li>扩大积分区域可以减小截断偏差，但会提高单样本方差；在本实验中，\([-6,6]^2\) 要到 \(10^6\) 至 \(10^7\) 之间才在 RMSE 上反超 \([-4,4]^2\)。</li>
+                    <li>对弯曲目标，匹配均值与协方差不足以描述结构；初始高斯在众数处局部正确，整体却严重错配，经验 RMSE 不随 \(N\) 稳定下降。</li>
+                    <li>在当前预算与固定随机流下，调参后的高斯方案经验 RMSE 最低，但这只是有限样本、单一评价种子的结果，且其权重二阶矩仍然发散。</li>
+                    <li>精确采样对照给出零方差基准，验证了抽样与估计实现；它依赖本题的解析结构，不是通用解法。</li>
+                </ul>
+            </section>
+
+            <section class="card">
+                <div class="section-heading">
+                    <p class="section-label">复现</p>
+                    <h2>代码与数据在哪里</h2>
+                </div>
+                <p>
+                    代码、raw 结果、summary、图表和 LaTeX 报告都在
+                    <a href="https://github.com/mnfe2o4/monte-carlo" target="_blank" rel="noreferrer">mnfe2o4/monte-carlo</a>。
+                    从已有 raw 重建统计结果和比较图，不需要重新采样：
+                </p>
+                <pre><code>.\.venv\Scripts\python.exe -m experiments.export_summary
+.\.venv\Scripts\python.exe -m experiments.comparison</code></pre>
+                <p>
+                    <code>results/summary/summary.csv</code> 按方法和 \(N\) 汇总 64 行统计量，
+                    包含均值、偏差、样本方差、RMSE、绝对误差中位数、95% 分位数与最大值。
+                    实验的样本量、重复次数、随机种子和依赖版本记录在 <code>configs/experiment_config.json</code>。
+                </p>
+                <p>
+                    尚未覆盖的部分包括：不同随机种子下的稳定性、计算时间比较、以及有界权重建议分布的设计。
+                    这些会决定“哪种建议分布更好”能否从经验观察上升为更一般的结论。
+                </p>
+            </section>
+
+            <section class="card">
+                <div class="section-heading">
+                    <p class="section-label">回到首页</p>
+                    <h2>继续浏览其他内容</h2>
+                </div>
+                <p><a class="text-link" href="../index.html">返回首页</a></p>
+            </section>
+        </article>
+    </main>
+
+    <footer class="site-footer">
+        <p>© 2026 MNFE2O4 的作品集</p>
+    </footer>
+</body>
+
+</html>
