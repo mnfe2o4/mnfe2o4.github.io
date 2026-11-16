@@ -396,6 +396,14 @@ code {
 }
 
 /* 文章插图 */
+.travel-preview {
+  display: block;
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
 .article-figure {
   margin: 22px 0;
 }

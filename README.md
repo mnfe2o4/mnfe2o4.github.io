@@ -15,6 +15,7 @@ https://mnfe2o4.github.io
 - 文章页
 - 联系方式
 - GitHub Pages 在线发布
+- 旅行手记：黄石公园与温哥华的地图行程、精选照片和原文游记
 
 ## 当前技术栈
 
@@ -25,6 +26,11 @@ https://mnfe2o4.github.io
 - Markdown：用于整理学习笔记和项目说明
 - MathJax：用于在网页中显示 LaTeX 公式
 - GitHub Pages：用于发布网站
+- Leaflet：用于旅行地图，地图库保存在本地，底图使用 OpenStreetMap
+
+## 旅行栏目
+
+入口为 `travel/index.html`。已整理黄石公园、温哥华两次旅行，支持按日期和地点查看路线与照片、键盘浏览大图，并保留游记原文。维护方式见 [旅行栏目说明](travel/README.md)。
 
 ## 后续计划
 
