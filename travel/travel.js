@@ -4,9 +4,10 @@
   if (!data) return;
   const page = document.body.dataset.page;
   const trip = data.trips.find(item => item.id === page);
+  const mapPoint = point => trip?.mapLongitudeOrigin===undefined?point:[point[0],point[1]+360*Math.round((trip.mapLongitudeOrigin-point[1])/360)];
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const escapeHTML = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  const colours = {car:'#225e79', transit:'#7b8d99', bus:'#738b9b', walk:'#8d9b91', bike:'#a87743', ferry:'#2585a7',flight:'#866b9a',train:'#47726e',activity:'#99845f'};
+  const colours = {car:'#225e79',taxi:'#ac7848',charter:'#ac7848',coach:'#ac7848',unknown:'#7b8d99',transit:'#7b8d99', bus:'#738b9b', walk:'#8d9b91', bike:'#a87743', ferry:'#2585a7',boat:'#2585a7',cablecar:'#a87743',flight:'#866b9a',train:'#47726e',activity:'#99845f'};
   const scrollTo = selector => document.querySelector(selector)?.scrollIntoView({behavior:reducedMotion?'instant':'smooth', block:'start'});
 
   function createMap(id) {
@@ -19,6 +20,7 @@
     const map = L.map(container, {scrollWheelZoom:false, zoomControl:false, zoomSnap:0.5, attributionControl:true, zoomAnimation:false, markerZoomAnimation:false, fadeAnimation:false});
     L.control.zoom({position:'bottomright'}).addTo(map);
     if(page==='yellowstone')map.attributionControl.addAttribution('路线 &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors');
+    if(data.routeSources?.length)map.attributionControl.addAttribution('<a href="map-sources.html">线路资料</a>');
     const isWebPage=/^https?:$/.test(location.protocol);
     let message=container.parentElement.querySelector('.map-message');
     if(!message){message=document.createElement('p');message.className='map-message';message.setAttribute('aria-live','polite');container.insertAdjacentElement('afterend',message);}
@@ -28,12 +30,26 @@
     for(const [name,lat,lon] of [['温哥华',49.28,-123.13],['西雅图',47.60,-122.33],['洛杉矶',34.05,-118.25],['Riverside',33.98,-117.3755],['盐湖城',40.76,-111.89],['黄石国家公园',44.65,-110.60]]){
       L.marker([lat,lon],{pane:'offline-labels',interactive:false,keyboard:false,icon:L.divIcon({className:'basemap-city-label',html:'<span>'+name+'</span>',iconSize:[85,18],iconAnchor:[-15,-12]})}).addTo(cityLabels);
     }
-    const offline=window.TRAVEL_OFFLINE_MAP?L.geoJSON(window.TRAVEL_OFFLINE_MAP,{pane:'offline-base',interactive:false,
-      renderer:L.canvas({pane:'offline-base'}),
+    const world=window.TRAVEL_OFFLINE_WORLD||window.TRAVEL_OFFLINE_MAP;
+    const detail=window.TRAVEL_OFFLINE_MAP;
+    const offlineOptions={pane:'offline-base',interactive:false,renderer:L.canvas({pane:'offline-base'}),
       style:feature=>feature.properties.kind==='land'?{color:'#b5c9c4',weight:0.8,fillColor:'#f0efe5',fillOpacity:1}:
         feature.properties.kind==='lake'?{color:'#afcdd6',weight:0.7,fillColor:'#d9e9ee',fillOpacity:1}:{color:'#a8cbd7',weight:1,opacity:0.8},
-      attribution:'<a href="https://www.naturalearthdata.com/about/terms-of-use/" target="_blank">Natural Earth</a> · 地理简图'
-    }).addTo(map):null;
+      attribution:'<a href="https://www.naturalearthdata.com/about/terms-of-use/" target="_blank">Natural Earth</a> · 地理简图'};
+    const offline=world?L.geoJSON(world,offlineOptions).addTo(map):null;
+    const wrapped=world&&trip?.mapLongitudeOrigin!==undefined?L.geoJSON(world,{...offlineOptions,coordsToLatLng:c=>L.latLng(c[1],c[0]-360)}).addTo(map):null;
+    let offlineKind='world';
+    function refreshOffline(){
+      if(!offline||map.getZoom()===undefined)return;
+      const center=map.getCenter(),bounds=detail?.bounds;
+      const lon=((center.lng+180)%360+360)%360-180;
+      const local=bounds&&map.getZoom()>=6&&lon>=bounds[0]&&lon<=bounds[2]&&center.lat>=bounds[1]&&center.lat<=bounds[3];
+      const next=local?'detail':'world';
+      if(next===offlineKind)return;
+      offlineKind=next;offline.clearLayers().addData(local?detail:world);
+      if(wrapped){wrapped.clearLayers();if(!local)wrapped.addData(world);}
+    }
+    map.on('zoomend moveend',refreshOffline);
     const tiles=L.tileLayer(data.map.tileUrl,{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors'});
     let mode=isWebPage?'online':'offline';let loaded=false;let fallbackScheduled=false;
     const control=L.control({position:'topright'});
@@ -71,26 +87,40 @@
   if (page === 'index') {
     const map = createMap('overview-map');
     const layers = map ? L.featureGroup().addTo(map) : null;
-    function filterHome(country) {
-      document.querySelectorAll('[data-trip-country]').forEach(card => {card.hidden=country!=='all' && card.dataset.tripCountry!==country;});
-      document.querySelectorAll('[data-country]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.country===country)));
-      if (!map) return;
+    let currentTrips=[];
+    const overviewPoint=item=>item.overviewCoordinates||item.stops.find(stop=>!stop.id.startsWith('airport-'))?.coordinates||item.stops[0].coordinates;
+    function drawOverview(){
+      if(!map)return;
       layers.clearLayers();
-      const trips=data.trips.filter(item => country==='all' || item.country===country);
-      const bounds=[];
-      for (const item of trips) {
-        const point=item.id==='yellowstone'?[44.73,-110.70]:[49.28,-123.13];
-        bounds.push(point);
-        const marker=L.marker(point,{icon:L.divIcon({className:'overview-pin',html:'<span>'+escapeHTML(item.title)+' ↗</span>',iconSize:[1,36],iconAnchor:[0,18]})}).addTo(layers);
-        marker.bindPopup('<strong>'+escapeHTML(item.title)+'</strong><p>'+escapeHTML(item.dateLabel)+'</p><a href="'+item.id+'.html">打开这段旅行 →</a>');
+      const points=currentTrips.map(item=>map.project(overviewPoint(item),map.getZoom()));
+      const parents=currentTrips.map((_,index)=>index);
+      const root=index=>{while(parents[index]!==index){parents[index]=parents[parents[index]];index=parents[index];}return index;};
+      for(let a=0;a<points.length;a++)for(let b=0;b<a;b++){
+        if(Math.abs(points[a].x-points[b].x)<210&&Math.abs(points[a].y-points[b].y)<55)parents[root(a)]=root(b);
       }
-      map.stop();
-      if (bounds.length===1) map.setView(bounds[0],6,{animate:false});
-      else map.fitBounds(bounds,{padding:[65,55],maxZoom:5,animate:false});
+      const groups=new Map();
+      currentTrips.forEach((item,index)=>{const key=root(index);if(!groups.has(key))groups.set(key,[]);groups.get(key).push(item);});
+      for(const group of groups.values()){
+        const point=overviewPoint(group[0]);
+        const countries=[...new Set(group.map(item=>item.country))];
+        const title=group.length===1?group[0].title:(countries.length===1?countries[0]+' · ':'')+group.length+' 次旅行';
+        const marker=L.marker(point,{icon:L.divIcon({className:'overview-pin',html:'<span>'+escapeHTML(title)+' ↗</span>',iconSize:[1,36],iconAnchor:[0,18]})}).addTo(layers);
+        marker.bindPopup(group.map(item=>'<p><a href="'+escapeHTML(item.id)+'.html">'+escapeHTML(item.title)+'</a><br><small>'+escapeHTML(item.dateLabel)+'</small></p>').join(''),{maxHeight:260,maxWidth:280});
+      }
     }
-    document.querySelectorAll('[data-country]').forEach(button => button.addEventListener('click',()=>filterHome(button.dataset.country)));
-    filterHome('all');
-    return;
+    function filterHome(country) {
+      document.querySelectorAll('[data-trip-country]').forEach(card=>{card.hidden=country!=='all'&&card.dataset.tripCountry!==country;});
+      document.querySelectorAll('[data-country]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.country===country)));
+      currentTrips=data.trips.filter(item=>country==='all'||item.country===country);
+      if(!map)return;
+      const bounds=currentTrips.map(overviewPoint);map.stop();
+      if(bounds.length===1)map.setView(bounds[0],6,{animate:false});
+      else if(bounds.length)map.fitBounds(bounds,{padding:[65,55],maxZoom:5,animate:false});
+      drawOverview();
+    }
+    if(map)map.on('zoomend',drawOverview);
+    document.querySelectorAll('[data-country]').forEach(button=>button.addEventListener('click',()=>filterHome(button.dataset.country)));
+    filterHome('all');return;
   }
   if (!trip) return;
 
@@ -110,21 +140,24 @@
     photoLayer.clearLayers();
     const hint=document.getElementById('map-photo-hint');
     if(!mapPhotosVisible){hint.textContent='';return;}
-    if(map.getZoom()<10){hint.textContent='放大地图查看照片';return;}
     const photos=trip.photos.filter(photo=>photo.mapCoordinates&&(selectedDay==='all'||photo.date===selectedDay)&&(!selectedStop||photo.stop===selectedStop));
-    const groups=new Map();
-    for(const photo of photos){
-      const point=map.project(photo.mapCoordinates,map.getZoom());
-      const key=Math.floor(point.x/120)+':'+Math.floor(point.y/92);
-      if(!groups.has(key))groups.set(key,[]);
-      groups.get(key).push(photo);
+    if(!photos.length){hint.textContent='暂无照片位置';return;}
+    if(map.getZoom()<10){hint.textContent='放大地图查看照片';return;}
+    // Merge overlapping thumbnail rectangles, including pairs across grid boundaries.
+    const points=photos.map(photo=>map.project(mapPoint(photo.mapCoordinates),map.getZoom()));
+    const parents=photos.map((_,index)=>index);
+    const root=index=>{while(parents[index]!==index){parents[index]=parents[parents[index]];index=parents[index];}return index;};
+    for(let a=0;a<points.length;a++)for(let b=0;b<a;b++){
+      if(Math.abs(points[a].x-points[b].x)<120&&Math.abs(points[a].y-points[b].y)<92)parents[root(a)]=root(b);
     }
+    const groups=new Map();
+    photos.forEach((photo,index)=>{const key=root(index);if(!groups.has(key))groups.set(key,[]);groups.get(key).push(photo);});
     for(const group of groups.values()){
       const photo=group[0];
       const label=photo.locationLabel||places.get(photo.stop).name;
       const title=group.length===1?'查看照片：'+photo.caption:label+' · '+group.length+' 张照片';
       const icon=L.divIcon({className:'map-photo-marker',html:'<img src="'+escapeHTML(photo.small)+'" alt="">'+(group.length>1?'<span class="map-photo-count">'+group.length+'</span>':''),iconSize:[96,72],iconAnchor:[-10,78],tooltipAnchor:[58,-78],popupAnchor:[58,-78]});
-      const marker=L.marker(photo.mapCoordinates,{icon,title,alt:title,keyboard:true,zIndexOffset:500}).addTo(photoLayer);
+      const marker=L.marker(mapPoint(photo.mapCoordinates),{icon,title,alt:title,keyboard:true,zIndexOffset:500}).addTo(photoLayer);
       marker.bindTooltip(group.length===1?photo.caption+' · '+label+(photo.mapLocationType==='place'?'（景点范围）':''):title,{direction:'top',offset:[0,-6]});
       if(group.length===1)marker.on('click',()=>openPhoto(photo.id));
       else{
@@ -145,10 +178,10 @@
     routeLayer.clearLayers(); markerLayer.clearLayers(); markers.clear();
     const routes=trip.routes.filter(route=>selectedDay==='all'||route.day===selectedDay);
     for (const route of routes) {
-      const dashed=route.status==='schematic'||route.status==='transfer-schematic'||route.status==='flight-connection'||route.mode==='walk'||route.mode==='bike';
-      const line=L.polyline(route.coordinates,{color:colours[route.mode]||colours.transit,weight:route.mode==='ferry'?4:3,opacity:0.85,dashArray:dashed?'6 7':null,lineCap:'round'}).addTo(routeLayer);
+      const dashed=route.status==='schematic'||route.status==='transfer-schematic'||route.status==='transit-alignment'||route.status==='flight-connection'||route.mode==='walk'||route.mode==='bike';
+      const line=L.polyline(route.coordinates.map(mapPoint),{color:colours[route.mode]||colours.transit,weight:route.mode==='ferry'?4:3,opacity:0.85,dashArray:dashed?'6 7':null,lineCap:'round'}).addTo(routeLayer);
       line.bindTooltip(route.label,{sticky:true,direction:'top'});
-      line.bindPopup('<strong>'+escapeHTML(route.label)+'</strong><p>'+(route.status==='road-reconstruction'?'自驾路段示意。':route.mode==='flight'?'机场间航班连接，非实际飞行轨迹。':route.mode==='ferry'?'Lonsdale Quay → Waterfront。':route.mode==='bike'?'10 月 19 日下午环园骑行。':'行程接续示意。')+'</p>');
+      line.bindPopup('<strong>'+escapeHTML(route.label)+'</strong><p>'+(route.status==='road-reconstruction'?'自驾路段示意。':route.mode==='flight'?'机场间航班连接，非实际飞行轨迹。':route.inferred?'线路走向为推定示意，未记录的细节保留为空。':route.geometryKind==='station-chain'?'按途经站点连接，区间走向为示意。':route.status==='transit-alignment'?'沿公共交通线路走向绘制，非连续定位轨迹。':route.mode==='ferry'?'轮渡航线示意。':route.mode==='bike'?(page==='vancouver'?'10 月 19 日下午环园骑行。':'骑行路线示意。'):'行程接续示意。')+'</p>');
       if (route.mode==='ferry') {
         const points=route.coordinates, a=points[points.length-2], b=points[points.length-1];
         const rotation=Math.atan2(b[1]-a[1],b[0]-a[0])*180/Math.PI;
@@ -156,8 +189,8 @@
       }
     }
     for (const id of availableStops()) {
-      const place=places.get(id); if (!place) continue;
-      const marker=L.marker(place.coordinates,{title:place.name,alt:place.name,keyboard:true,icon:L.divIcon({className:'map-number'+(selectedStop===id?' active':''),html:'<span>'+place.index+'</span>',iconSize:[27,27],iconAnchor:[13,13]})}).addTo(markerLayer);
+      const place=places.get(id); if (!place?.coordinates) continue;
+      const marker=L.marker(mapPoint(place.coordinates),{title:place.name,alt:place.name,keyboard:true,icon:L.divIcon({className:'map-number'+(selectedStop===id?' active':''),html:'<span>'+place.index+'</span>',iconSize:[27,27],iconAnchor:[13,13]})}).addTo(markerLayer);
       marker.bindPopup('<strong>'+escapeHTML(place.name)+'</strong><p>'+escapeHTML(place.note)+'</p><button type="button" class="popup-photo-link" data-gallery-stop="'+escapeHTML(id)+'">看这里的照片 →</button>');
       marker.on('click',()=>{selectStop(id,false);});
       markers.set(id,marker);
@@ -165,8 +198,8 @@
     if (fit) {
       const coords=routes.flatMap(route=>route.coordinates).concat(availableStops().map(id=>places.get(id)?.coordinates).filter(Boolean));
       map.stop();
-      if (coords.length) map.fitBounds(coords,{padding:[36,40],maxZoom:13,animate:false});
-      else map.fitBounds(trip.mapFocus,{padding:[22,22],animate:false});
+      if (coords.length) map.fitBounds(coords.map(mapPoint),{padding:[36,40],maxZoom:13,animate:false});
+      else map.fitBounds(trip.mapFocus.map(mapPoint),{padding:[22,22],animate:false});
     }
   }
 
@@ -193,7 +226,7 @@
       const place=places.get(sid);
       marker.setIcon(L.divIcon({className:'map-number'+(sid===id?' active':''),html:'<span>'+place.index+'</span>',iconSize:[27,27],iconAnchor:[13,13]}));
     }
-    if (pan&&map&&markers.has(id)) {map.stop();map.setView(places.get(id).coordinates,Math.max(map.getZoom(),12),{animate:false});markers.get(id).openPopup();}
+    if (pan&&map&&markers.has(id)) {map.stop();map.setView(mapPoint(places.get(id).coordinates),Math.max(map.getZoom(),12),{animate:false});markers.get(id).openPopup();}
     filterGallery();
   }
 
@@ -263,7 +296,7 @@
         button.setAttribute('aria-pressed',String(mapPhotosVisible));
         renderMapPhotos();
       }
-      else {map.stop();map.fitBounds(trip.mapFocus,{padding:[20,20],animate:false});}
+      else {map.stop();map.fitBounds(trip.mapFocus.map(mapPoint),{padding:[20,20],animate:false});}
     }
   });
   document.querySelectorAll('.trip-anchor-nav a').forEach(link=>link.addEventListener('click',()=>{

@@ -111,6 +111,8 @@
 .legend-line{display:inline-block;width:22px;height:0;border-top:3px dashed #235e79}
 .legend-line.bike{border-color:#a97842}.legend-line.ferry{border-color:#318eae;border-top-style:solid}
 .legend-line.flight{border-color:#866b9a}.legend-line.train{border-color:#47726e}
+.legend-line.bus{border-color:#738b9b}.legend-line.taxi{border-color:#ac7848}
+.transport-tag.mode-taxi,.transport-tag.mode-charter,.transport-tag.mode-coach{background:#f4eadd;color:#8b623e}
 .route-caption{font-size:.68rem;color:#7b8e96;margin:0;padding:4px 14px 10px;background:#fafbf9}
 .itinerary-panel{padding:14px;border-left:1px solid #d6dfdf;max-height:610px;overflow:auto;scrollbar-width:thin;min-width:0}
 .itinerary-fold{margin-bottom:8px;border:1px solid #dce5e6;border-radius:4px;overflow:clip}
@@ -148,6 +150,8 @@
 .transport-tag.mode-car{background:#e4eef8;color:#3a6c92}
 .transport-tag.mode-activity{background:#f2eadd;color:#88704e}
 .transfer-service{display:block;font-size:.7rem;line-height:1.7;color:#3c6379;margin-top:3px}
+.transfer-time{display:block;font-size:.65rem;line-height:1.7;color:#718995;margin-top:2px}
+.transport-tag:empty,.transfer-service:empty{display:none}
 .stop-index{margin-top:14px}
 .stop-index>summary{background:none;padding:4px 2px;font-size:.78rem}
 .stop-list{list-style:none;margin:8px 0 0;padding:0}

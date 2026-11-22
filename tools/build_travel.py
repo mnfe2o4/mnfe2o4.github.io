@@ -16,13 +16,13 @@ def image(photo,large=False,eager=False,extra=''):
     return f'<img src="{e(photo["large"] if large else photo["small"])}" srcset="{e(photo["small"])} {sw}w, {e(photo["large"])} {lw}w" sizes="{extra or "(max-width: 700px) 100vw, (max-width: 1000px) 50vw, 400px"}" width="{w}" height="{h}" alt="{e(photo["caption"])}" loading="{"eager" if eager else "lazy"}" decoding="async"{chr(32)+"fetchpriority=high" if eager else ""}>'
 
 
-def head(title,description,page):
+def head(title,description,page,region="offline-map"):
     return f'''<!DOCTYPE html>
 <html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="{e(description)}"><meta name="theme-color" content="#0e3a5d">
 <meta name="referrer" content="strict-origin-when-cross-origin"><title>{e(title)}｜MNFE2O4</title>
 <link rel="stylesheet" href="../style.css"><link rel="stylesheet" href="vendor/leaflet/leaflet.css"><link rel="stylesheet" href="travel.css">
-<script src="vendor/leaflet/leaflet.js" defer></script><script src="data/offline-map.js" defer></script><script src="data/trips.js" defer></script><script src="travel.js" defer></script>
+<script src="vendor/leaflet/leaflet.js" defer></script><script src="data/offline-world.js" defer></script><script src="data/{e(region)}.js" defer></script><script src="data/trips.js" defer></script><script src="travel.js" defer></script>
 </head><body class="travel-page" data-page="{e(page)}"><a class="skip-link" href="#main-content">跳转到主要内容</a>
 <header class="travel-header"><a class="travel-brand" href="../index.html">MNFE2O4<span> / 旅行手记</span></a>
 <nav aria-label="主导航"><a href="../index.html">首页</a><a href="index.html" aria-current="{'page' if page=='index' else 'true'}">旅行</a><a href="../index.html#works">文章</a><a href="../about.html">关于我</a></nav></header>'''
@@ -39,29 +39,37 @@ def tile(trip):
 
 
 def home(data):
-    y,v=data['trips'];cover=next(p for p in y['photos'] if p['key']==y['coverPhoto']);aside=next(p for p in v['photos'] if p['key']=='V360')
-    text=head('旅行手记','用地图、照片与原文游记，记录黄石公园与温哥华的旅程。','index')
-    text+=f'''<main id="main-content" class="travel-main"><section class="travel-home-hero"><div class="home-hero-copy"><p class="small-eyebrow">PLACES, PATHS & MEMORIES</p><h1>走过的路，<br>留下的风景。</h1><p class="home-intro">有些记忆在目的地，<br>有些就藏在前往那里的路上。</p><a class="primary-link" href="#journeys">翻开旅行手记 <span aria-hidden="true">↓</span></a><div class="home-stats"><div><strong>{len(data['trips']):02}</strong><span>段旅程</span></div><div><strong>{sum(len(t['photos']) for t in data['trips'])}</strong><span>张精选照片</span></div><div><strong>2025</strong><span>这一年的远行</span></div></div></div><div class="home-hero-photos"><figure class="hero-photo-main">{image(cover,large=True,eager=True,extra='(max-width: 700px) 100vw, 700px')}<figcaption>01 / 黄石公园 · 大棱镜温泉</figcaption></figure><figure class="hero-photo-aside">{image(aside,large=True)}<figcaption>02 / 温哥华 · 秋日的海湾</figcaption></figure><span class="hero-photo-index" aria-hidden="true">45° N — 49° N</span></div></section>
-<section class="overview-section" aria-labelledby="overview-heading"><div class="section-title-row"><div><p class="small-eyebrow">ON THE MAP</p><h2 id="overview-heading">两段旅程，放回地图里</h2></div><p class="section-aside">点地图上的地点，打开对应的手记。</p></div><div class="overview-map map-canvas" id="overview-map" role="region" aria-label="黄石公园与温哥华的旅行地图"></div><div class="overview-fallback"><a href="yellowstone.html">美国 · 黄石公园</a><span> / </span><a href="vancouver.html">加拿大 · 温哥华</a></div></section>
-<section id="journeys" class="journeys-section"><div class="section-title-row"><div><p class="small-eyebrow">TRAVEL JOURNALS</p><h2>已经翻开的手记</h2></div><div class="home-filters" role="group" aria-label="按旅行地区筛选"><button type="button" data-country="all" aria-pressed="true">全部</button><button type="button" data-country="美国" aria-pressed="false">美国</button><button type="button" data-country="加拿大" aria-pressed="false">加拿大</button></div></div><div class="trip-grid">'''
-    for trip in data['trips']:
+    y=next(t for t in data['trips'] if t['id']=='yellowstone');v=next(t for t in data['trips'] if t['id']=='vancouver');cover=next(p for p in y['photos'] if p['key']==y['coverPhoto']);aside=next(p for p in v['photos'] if p['key']=='V360')
+    text=head('旅行手记','用地图、照片与游记，记录沿途的风景。','index')
+    text+=f'''<main id="main-content" class="travel-main"><section class="travel-home-hero"><div class="home-hero-copy"><p class="small-eyebrow">PLACES, PATHS & MEMORIES</p><h1>走过的路，<br>留下的风景。</h1><p class="home-intro">有些记忆在目的地，<br>有些就藏在前往那里的路上。</p><a class="primary-link" href="#journeys">翻开旅行手记 <span aria-hidden="true">↓</span></a><div class="home-stats"><div><strong>{len(data['trips']):02}</strong><span>段旅程</span></div><div><strong>{sum(len(t['photos']) for t in data['trips'])}</strong><span>张精选照片</span></div><div><strong>{min(t["dateStart"][:4] for t in data["trips"])}–{max(t["dateEnd"][2:4] for t in data["trips"])}</strong><span>记录的年份</span></div></div></div><div class="home-hero-photos"><figure class="hero-photo-main">{image(cover,large=True,eager=True,extra='(max-width: 700px) 100vw, 700px')}<figcaption>01 / 黄石公园 · 大棱镜温泉</figcaption></figure><figure class="hero-photo-aside">{image(aside,large=True)}<figcaption>02 / 温哥华 · 秋日的海湾</figcaption></figure><span class="hero-photo-index" aria-hidden="true">45° N — 49° N</span></div></section>
+<section class="overview-section" aria-labelledby="overview-heading"><div class="section-title-row"><div><p class="small-eyebrow">ON THE MAP</p><h2 id="overview-heading">走过的地方，放回地图里</h2></div><p class="section-aside">点地图上的地点，打开对应的手记。</p></div><div class="overview-map map-canvas" id="overview-map" role="region" aria-label="旅行足迹地图"></div><div class="overview-fallback"><a href="yellowstone.html">美国 · 黄石公园</a><span> / </span><a href="vancouver.html">加拿大 · 温哥华</a></div></section>
+<section id="journeys" class="journeys-section"><div class="section-title-row"><div><p class="small-eyebrow">TRAVEL JOURNALS</p><h2>已经翻开的手记</h2></div><div class="home-filters" role="group" aria-label="按旅行地区筛选"><button type="button" data-country="all" aria-pressed="true">全部</button>{''.join(f'<button type="button" data-country="{e(country)}" aria-pressed="false">{e(country)}</button>' for country in dict.fromkeys(t['country'] for t in data['trips']))}</div></div><div class="trip-grid">'''
+    for trip in sorted(data['trips'],key=lambda t:t['dateStart'],reverse=True):
         text+=f'<div data-trip-country="{e(trip["country"])}">{tile(trip)}</div>'
-    text+='</div></section><section class="archive-section"><details><summary><span>还有一些旅程，正在慢慢整理</span><span class="archive-count">19 段记录 ＋</span></summary><p class="muted">以下是已有素材的旅行目录，路线与照片会逐次补上。</p><ol class="archive-list">'
-    for trip in sorted(data['archive'],key=lambda t:t['startDateCandidate'],reverse=True):
-        label='日期待核实' if trip['status']=='date-to-verify' else trip['startDateCandidate']+' — '+trip['endDateCandidate']
-        text+=f'<li><span>{e(trip["title"])}</span><time>{e(label)}</time><span class="muted">待整理</span></li>'
-    return text+'</ol></details></section></main>'+footer()
+    text+='</div></section>'
+    if data.get('archive'):
+        text+=f'<section class="archive-section"><details><summary>其他旅行 <span class="archive-count">{len(data["archive"])} 段记录 ＋</span></summary><ol class="archive-list">'
+        for trip in sorted(data['archive'],key=lambda t:t['startDateCandidate'],reverse=True):
+            text+=f'<li><span>{e(trip["title"])}</span><time>{e(trip["startDateCandidate"])} — {e(trip["endDateCandidate"])}</time></li>'
+        text+='</ol></details></section>'
+    return text+'</main>'+footer()
+
 
 
 def transfers(trip,places):
-    modes={'flight':'航班','train':'铁路','bus':'巴士','car':'汽车','walk':'步行','activity':'停留'}
-    text=f'<details id="transit" class="itinerary-fold transfer-fold"><summary><span>往返交通</span><span class="fold-count">{len(trip["transfers"])} 段</span></summary><div class="fold-body"><table class="transfer-table"><caption class="visually-hidden">往返交通与班次</caption><thead><tr><th scope="col">日期</th><th scope="col">路段</th><th scope="col">交通 / 班次</th></tr></thead><tbody>'
-    for leg in trip['transfers']:
+    if not trip.get('transfers'):return ''
+    modes={'flight':'航班','train':'铁路','bus':'巴士','car':'自驾','taxi':'打车','charter':'包车','coach':'团体巴士','walk':'步行','activity':'停留','ferry':'轮渡','boat':'游船','cablecar':'缆车','transit':'公共交通'}
+    text=f'<details id="transit" class="itinerary-fold transfer-fold"><summary><span>往返交通</span><span class="fold-count">{len(trip.get("transfers",[]))} 段</span></summary><div class="fold-body"><table class="transfer-table"><caption class="visually-hidden">往返交通与班次</caption><thead><tr><th scope="col">日期</th><th scope="col">路段</th><th scope="col">交通 / 班次</th></tr></thead><tbody>'
+    for leg in trip.get('transfers',[]):
         label=e(leg['dateLabel'])
         if '—' in label:
             a,b=label.split('—',1);label=a+'<br>—'+(b[3:] if a[:3]==b[:3] else b)
-        text+=f'<tr class="transfer-leg"><td><time datetime="{e(leg["date"])}">{label}</time></td><td>{e(places[leg["from"]]["name"])} <span class="route-arrow" aria-hidden="true">→</span> {e(places[leg["to"]]["name"])}</td><td><span class="transport-tag mode-{leg["mode"]}">{modes[leg["mode"]]}</span><span class="transfer-service">{e(leg["service"])}</span></td></tr>'
-    return text+'</tbody></table></div></details>'
+        timing=''
+        if leg.get('departureTime') or leg.get('arrivalTime'):
+            clock=(leg['departureTime']+' → '+leg['arrivalTime']+(' +1' if leg.get('arrivalDate','')>leg['date'] else '')) if leg.get('departureTime') and leg.get('arrivalTime') else (leg.get('departureTime','')+' 出发' if leg.get('departureTime') else leg.get('arrivalTime','')+' 抵达')
+            timing='<small class="transfer-time">'+e(clock)+'</small>'
+        text+=f'<tr class="transfer-leg"><td><time datetime="{e(leg["date"])}">{label}</time></td><td>{e(places[leg["from"]]["name"])} <span class="route-arrow" aria-hidden="true">→</span> {e(places[leg["to"]]["name"])}</td><td><span class="transport-tag mode-{leg["mode"]}">{modes.get(leg["mode"],"")}</span><span class="transfer-service">{e(leg["service"])}</span>{timing}</td></tr>'
+    return text+'</tbody></table><p class="route-caption">航班时间均为各机场当地时间。</p></div></details>' if any(leg['mode']=='flight' for leg in trip.get('transfers',[])) else text+'</tbody></table></div></details>'
 
 
 def route_section(trip,places):
@@ -69,10 +77,15 @@ def route_section(trip,places):
     for index,day in enumerate(trip['days'],1):
         text+=f'<button type="button" data-day="{e(day["date"])}" aria-pressed="false"><span>DAY {index:02}</span> {day["date"][5:].replace("-",".")}</button>'
     text+='</div><p id="route-active-summary" class="route-active-summary" aria-live="polite"></p><div class="route-layout"><div class="route-map-wrap"><div id="trip-map" class="map-canvas trip-map" role="region" aria-label="旅行停留点与路线地图"></div><div class="map-toolbar"><button type="button" data-map-action="all">全程往返</button>'
-    text+=f'<button type="button" data-map-action="focus">{"园区细看" if trip["id"]=="yellowstone" else "市区细看"}</button></div><div class="map-photo-control"><button type="button" data-map-action="photos" aria-pressed="true">照片位置</button><span id="map-photo-hint" aria-live="polite">放大地图查看照片</span></div><p class="map-message" aria-live="polite"></p><div class="map-legend"><span><i class="legend-line"></i>{"自驾路线" if trip["id"]=="yellowstone" else "公共交通"}</span>'
+    text+=f'<button type="button" data-map-action="focus">{"园区细看" if trip["id"]=="yellowstone" else "市区细看"}</button></div><div class="map-photo-control"><button type="button" data-map-action="photos" aria-pressed="true">照片位置</button><span id="map-photo-hint" aria-live="polite">放大地图查看照片</span></div><p class="map-message" aria-live="polite"></p><div class="map-legend"><span><i class="legend-line"></i>{"自驾路线" if trip["id"]=="yellowstone" else e(trip.get('mapTransportLabel','行程接续'))}</span>'
     if trip['id']=='vancouver':
         text+='<span><i class="legend-line bike"></i>环园骑行</span><span><i class="legend-line ferry"></i>SeaBus 返程</span>'
-    text+='<span><i class="legend-line flight"></i>航班</span><span><i class="legend-line train"></i>铁路接驳</span></div><p class="route-caption">路线为示意，航班连线非实际飞行轨迹。</p></div><aside class="itinerary-panel" aria-label="行程与地点">'+transfers(trip,places)+'<h3 class="route-places-heading">路上的停留点</h3><p id="route-day-summary">点击地点，在地图上定位。</p><ol class="stop-list">'
+    if trip['id']!='vancouver' and any(r['mode']=='ferry' for r in trip['routes']):text+='<span><i class="legend-line ferry"></i>轮渡</span>'
+    if any(r['mode']=='flight' for r in trip['routes']):text+='<span><i class="legend-line flight"></i>航班</span>'
+    if any(r['mode']=='train' for r in trip['routes']):text+='<span><i class="legend-line train"></i>铁路 / 轨道交通</span>'
+    if any(r['mode']=='bus' for r in trip['routes']):text+='<span><i class="legend-line bus"></i>巴士</span>'
+    if any(r['mode'] in ['taxi','charter','coach'] for r in trip['routes']):text+='<span><i class="legend-line taxi"></i>打车 / 包车 / 团体巴士</span>'
+    text+='</div><p class="route-caption">公共交通按线路或途经站点绘制，均为行程示意；未记下的具体班次留空。航班连线非实际飞行轨迹。</p></div><aside class="itinerary-panel" aria-label="行程与地点">'+transfers(trip,places)+'<h3 class="route-places-heading">路上的停留点</h3><p id="route-day-summary">点击地点，在地图上定位。</p><ol class="stop-list">'
     for index,stop in enumerate(trip['stops'],1):
         text+=f'<li data-stop-row="{e(stop["id"])}"><button type="button" class="stop-button" data-stop="{e(stop["id"])}"><span class="stop-number">{index:02}</span><span>{e(stop["name"])}<small>{e(stop["english"])}</small></span><span aria-hidden="true">↗</span></button></li>'
     return text+'</ol></aside></div></section>'
@@ -98,35 +111,55 @@ def gallery(trip,places):
     text='<section id="gallery" class="gallery-section"><div class="section-title-row"><div><p class="small-eyebrow">MOMENTS TO KEEP</p><h2>值得留下的画面</h2></div><div class="gallery-meta"><span id="gallery-count" aria-live="polite">'+str(len(trip['photos']))+' 张照片</span><button type="button" class="text-button" id="gallery-reset" hidden>显示全部</button></div></div><div class="gallery-active-filter" id="gallery-filter" aria-live="polite"></div><div class="photo-grid">'
     for index,photo in enumerate(trip['photos']):
         sizes='(max-width: 720px) calc((100vw - 44px)/2), (max-width: 899px) 30vw, '+('760px' if index%9==0 else '370px')
-        text+=f'<figure class="gallery-item" data-photo-date="{photo["date"]}" data-photo-stop="{photo["stop"]}"><button type="button" class="gallery-open" data-photo="{photo["id"]}" aria-label="查看大图：{e(photo["caption"])}">{image(photo,extra=sizes)}<span class="photo-expand" aria-hidden="true">↗</span></button><figcaption><span>{e(photo["caption"])}</span><small>{photo["date"][5:].replace("-",".")} · {photo["time"]} <span>{e(photo.get("locationLabel",places[photo["stop"]]["name"]))}</span></small></figcaption></figure>'
+        text+=f'<figure class="gallery-item" data-photo-date="{photo["date"]}" data-photo-stop="{photo["stop"]}"><button type="button" class="gallery-open" data-photo="{photo["id"]}" aria-label="查看大图：{e(photo["caption"])}">{image(photo,extra=sizes)}<span class="photo-expand" aria-hidden="true">↗</span></button><figcaption><span>{e(photo["caption"])}</span><small>{photo["date"][5:].replace("-",".")}{" · "+e(photo["time"]) if photo.get("time") else ""} <span>{e(photo.get("locationLabel",places[photo["stop"]]["name"]))}</span></small></figcaption></figure>'
     return text+'</div><p class="gallery-empty" hidden>暂无照片。</p></section>'
 
 
 def essay(trip):
+    entries=trip.get('essays') or ([{'title':'','body':trip['essay']}] if trip.get('essay') else [])
+    if not entries:return ''
     text='<section id="essay" class="essay-section"><div class="essay-heading"><p class="small-eyebrow">NOTES FROM THE ROAD</p><h2>旅行随记</h2><p>'+e(trip['english'])+'</p></div><div class="essay-prose">'
-    for para in re.split(r'\n\s*\n',trip['essay'].replace('\u200b','').strip()):
-        if para.strip():text+='<p>'+e(para.strip()).replace('\n','<br>')+'</p>'
+    for entry in entries:
+        if len(entries)>1:text+='<h3>'+e(entry['title'])+'</h3>'
+        for para in re.split(r'\n\s*\n',entry['body'].replace('\u200b','').strip()):
+            if para.strip():text+='<p>'+e(para.strip()).replace('\n','<br>')+'</p>'
     return text+'</div></section>'
 
 
-def detail(trip):
+def detail(trip,trips):
     tid=trip['id'];places={s['id']:s for s in trip['stops']};cover=next(p for p in trip['photos'] if p['key']==trip['coverPhoto'])
-    text=head(trip['title']+'旅行手记',trip['intro'],tid)
+    text=head(trip['title']+'旅行手记',trip['intro'],tid,trip.get('offlineRegion','offline-map'))
     text+=f'''<main id="main-content" class="travel-main trip-main"><div class="trip-breadcrumb"><a href="index.html">旅行手记</a><span aria-hidden="true"> / </span><span>{e(trip['title'])}</span></div><section class="trip-hero">{image(cover,large=True,eager=True,extra='100vw')}<div class="trip-hero-shade"></div><div class="trip-hero-copy"><p class="small-eyebrow">{e(trip['english'])}</p><h1>{e(trip['title'])}</h1><p>{e(trip['quote'])}</p><div class="trip-hero-meta"><span>{e(trip['dateLabel'])}</span><span>{e(trip['transportLabel'])}</span></div></div><span class="trip-hero-caption">{e(cover['caption'])}</span></section>
 <nav class="trip-anchor-nav" aria-label="旅行内容导航"><a href="#transit">往返交通</a><a href="#route">地图行程</a><a href="#days">每日记录</a><a href="#gallery">精选照片 <span>{len(trip['photos'])}</span></a><a href="#essay">旅行随记</a></nav>
 <div class="trip-introduction"><p>{e(trip['intro'])}</p>'''
     if trip.get('dateNote'):text+=f'<p class="date-note">{e(trip["dateNote"])}</p>'
+    if not trip.get('transfers'):
+        text=text.replace('<a href="#transit">往返交通</a>','')
+    if not (trip.get('essay') or trip.get('essays')):
+        text=text.replace('<a href="#essay">旅行随记</a>','')
     text+='</div>'+route_section(trip,places)+days(trip,places)+gallery(trip,places)+essay(trip)
-    other='vancouver' if tid=='yellowstone' else 'yellowstone';name='温哥华 · 秋色与海湾' if tid=='yellowstone' else '黄石公园 · 河谷与热泉'
+    ordered=sorted(trips,key=lambda t:t['dateStart'],reverse=True)
+    following=ordered[(next(i for i,t in enumerate(ordered) if t['id']==tid)+1)%len(ordered)]
+    other=following['id'];name=following['title']
     return text+f'<section class="next-journey"><p class="small-eyebrow">ANOTHER JOURNEY</p><a href="{other}.html">下一段旅程：{name} <span aria-hidden="true">↗</span></a></section></main>'+footer()
+
+
+def map_sources(data):
+    text=head('地图与线路资料','地图和交通线路的公开资料来源。','map-sources')
+    text=re.sub(r'<script\b[^>]*>.*?</script>','',text)
+    text+='''<main id="main-content" class="travel-main"><section class="journeys-section"><p class="small-eyebrow">MAP SOURCES</p><h1>地图与线路资料</h1><p>线路用于回看旅行。轨道和公交沿公开线形或途经站点展示；推定接续在地图弹窗中标明，不代表连续定位轨迹。现行交通资料仅用于核对线路走向，不用于补造历史车次或时刻。</p><p>底图：Natural Earth（公有领域）；在线街道与部分线路地理资料：© OpenStreetMap contributors（ODbL）。日本铁路：国土交通省「国土数値情報・鉄道データ N02-24」（CC BY 4.0）。德国铁路：DB Geo Streckennetz；慕尼黑站点：MVV。美国与加拿大公共交通资料来自下列运营机构。</p><ul>'''
+    for source in data.get('routeSources',[]):text+=f'<li><a href="{e(source["url"])}" target="_blank" rel="noopener">{e(source["title"])}</a></li>'
+    text+='''</ul><h2 id="sfmta">SFMTA data notice</h2><p>Reproduced with permission granted by the City and County of San Francisco. The information has been provided by means of a nonexclusive, limited, and revocable license granted by the City and County of San Francisco.</p><p>The City and County of San Francisco does not guarantee the accuracy, adequacy, completeness or usefulness of any information. The City and County of San Francisco provides this information "as is," without warranty of any kind, express or implied, including but not limited to warranties of merchantability or fitness for a particular purpose, and assumes no responsibility for anyone's use of the information.</p><p><a href="data/licenses/SFMTA_Transit_Data_License_Agreement.txt">SFMTA Transit Data Feed License Agreement</a></p>'''
+    return text+'<p><a href="index.html">返回旅行手记</a></p></section></main>'+footer()
 
 
 def main():
     data=json.loads((TRAVEL/'data/trips.json').read_text(encoding='utf-8'))
     (TRAVEL/'index.html').write_text(home(data),encoding='utf-8')
-    for trip in data['trips']:(TRAVEL/(trip['id']+'.html')).write_text(detail(trip),encoding='utf-8')
+    for trip in data['trips']:(TRAVEL/(trip['id']+'.html')).write_text(detail(trip,data['trips']),encoding='utf-8')
+    if data.get('routeSources'):(TRAVEL/'map-sources.html').write_text(map_sources(data),encoding='utf-8')
     (TRAVEL/'data/trips.js').write_text('window.TRAVEL_DATA = '+json.dumps(data,ensure_ascii=False,separators=(',',':'))+';\n',encoding='utf-8')
-    print('Rendered travel index, two trip pages and browser data.')
+    print(f'Rendered travel index, {len(data["trips"])} trip pages and browser data.')
 
 
 if __name__=='__main__':main()
