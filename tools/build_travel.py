@@ -56,6 +56,17 @@ def home(data):
 
 
 
+def transfer_clock(departure,arrival,arrival_date,departure_date):
+    next_day=' +1' if arrival_date and arrival_date>departure_date else ''
+    if departure and arrival:
+        return f'{departure} → {arrival}{next_day}'
+    if departure:
+        return f'{departure} 出发'
+    if arrival:
+        return f'{arrival}{next_day} 抵达'
+    return ''
+
+
 def transfers(trip,places):
     if not trip.get('transfers'):return ''
     modes={'flight':'航班','train':'铁路','bus':'巴士','car':'自驾','taxi':'打车','charter':'包车','coach':'团体巴士','walk':'步行','activity':'停留','ferry':'轮渡','boat':'游船','cablecar':'缆车','transit':'公共交通'}
@@ -64,10 +75,13 @@ def transfers(trip,places):
         label=e(leg['dateLabel'])
         if '—' in label:
             a,b=label.split('—',1);label=a+'<br>—'+(b[3:] if a[:3]==b[:3] else b)
-        timing=''
-        if leg.get('departureTime') or leg.get('arrivalTime'):
-            clock=(leg['departureTime']+' → '+leg['arrivalTime']+(' +1' if leg.get('arrivalDate','')>leg['date'] else '')) if leg.get('departureTime') and leg.get('arrivalTime') else (leg.get('departureTime','')+' 出发' if leg.get('departureTime') else leg.get('arrivalTime','')+' 抵达')
-            timing='<small class="transfer-time">'+e(clock)+'</small>'
+        actual=transfer_clock(leg.get('departureTime'),leg.get('arrivalTime'),leg.get('arrivalDate'),leg['date'])
+        scheduled=transfer_clock(leg.get('scheduledDepartureTime'),leg.get('scheduledArrivalTime'),
+                                 leg.get('scheduledArrivalDate'),leg['date'])
+        clocks=[('实际 ' if scheduled else '')+actual] if actual else []
+        if scheduled:
+            clocks.append('计划 '+scheduled)
+        timing=''.join(f'<small class="transfer-time">{e(clock)}</small>' for clock in clocks)
         text+=f'<tr class="transfer-leg"><td><time datetime="{e(leg["date"])}">{label}</time></td><td>{e(places[leg["from"]]["name"])} <span class="route-arrow" aria-hidden="true">→</span> {e(places[leg["to"]]["name"])}</td><td><span class="transport-tag mode-{leg["mode"]}">{modes.get(leg["mode"],"")}</span><span class="transfer-service">{e(leg["service"])}</span>{timing}</td></tr>'
     return text+'</tbody></table><p class="route-caption">航班时间均为各机场当地时间。</p></div></details>' if any(leg['mode']=='flight' for leg in trip.get('transfers',[])) else text+'</tbody></table></div></details>'
 
